@@ -1,57 +1,45 @@
 <template>
-  <b-card no-body>
+  <b-card no-body border-variant="0">
     <b-tabs pills card>
-      <b-tab title="Tasks" active no-body>
-        <b-card-text>
-          <table class="table m-0">
-            <thead class="bg-light">
-            <th>Name</th>
-            <th width="20%">Delete</th>
-            </thead>
-            <tbody>
-            <tr v-bind:key="task.value" v-for="task in tasks">
-              <td>{{task.text}}</td>
-              <td>
-                <b-button size="sm" block variant="danger">x</b-button>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </b-card-text>
+      <b-tab title="Tasks" active no-body @click="display='task'">
+        <info-card v-bind:key="task._id" v-for="task in query.tasks" :obj="task" v-on:destroy="destroy(task)">
+          <template v-slot:header>
+            {{task.name}}
+          </template>
+          <template v-slot:content>
+            {{task.description}}
+          </template>
+        </info-card>
       </b-tab>
-      <b-tab title="Factors" no-body>
-        <table class="table m-0">
-          <thead class="bg-light">
-          <th>Name</th>
-          <th width="20%">Delete</th>
-          </thead>
-          <tbody>
-          <tr v-bind:key="factor.value" v-for="factor in factors">
-            <td>{{factor.text}}</td>
-            <td>
-              <b-button size="sm" block variant="danger">x</b-button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+      <b-tab title="Factors" no-body class="p-2" @click="display='factor'">
+        <info-card v-bind:key="factor._id" v-for="factor in query.factors" :obj="factor" v-on:destroy="destroy(factor)">
+          <template v-slot:header>
+            {{factor.name}}
+          </template>
+          <template v-slot:content>
+            {{factor.description}}
+          </template>
+        </info-card>
       </b-tab>
-      <b-tab title="Impacts" no-body>
-        <table class="table m-0">
-          <thead class="bg-light">
-          <th>Name</th>
-          <th width="20%">Delete</th>
-          </thead>
-          <tbody>
-          <tr v-bind:key="impact.value" v-for="impact in impacts">
-            <td>{{impact.text}}</td>
-            <td>
-              <b-button size="sm" block variant="danger">x</b-button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+      <b-tab title="Impacts" no-body @click="display='impact'">
+        <info-card v-bind:key="impact._id" deck v-for="impact in query.impacts" :obj="impact" v-on:destroy="destroy(impact)">
+          <template v-slot:header>
+            <span class="badge badge-warning text-white pl-1 pr-1">{{impact.task[0].name}}</span> is affected
+            <span class="badge badge-info text-white pl-1 pr-1">{{impact.factor[0].name}}</span>
+          </template>
+          <template v-slot:content>
+            {{impact.task[0].name}} affects {{impact.factor[0].name}}
+            <span class="badge"
+                  v-bind:class="{'badge-success': impact.influence==='positive', 'badge-danger': impact.influence==='negative', 'badge-warning': impact.influence==='indifferent'}">{{impact.influence}}</span>
+            <br/>
+            Source: {{impact.source}}
+          </template>
+        </info-card>
       </b-tab>
       <b-tab title="Add">
+        <b-alert variant="success" v-if="saved">
+          Saved!
+        </b-alert>
         <b-form-select
             id="input-3"
             v-model="type"
@@ -60,9 +48,7 @@
         ></b-form-select>
         <hr/>
         <b-card-text>
-
           <b-form @submit="onSubmit" @reset="onReset">
-
             <template v-if="type==='task'">
               <b-form-group label="Name:">
                 <b-form-input
@@ -97,37 +83,28 @@
             </template>
 
             <template v-if="type==='impact'">
-              <b-form-group label="Task:">
+              <b-form-group label="The task:">
                 <b-form-select
                     v-model="form.impact.task"
-                    :options="tasks"
+                    :options="taskOptions"
                     required
                 ></b-form-select>
               </b-form-group>
 
-              <b-form-group label="Factor:">
+              <b-form-group label="is affected by the factor:">
                 <b-form-select
                     v-model="form.impact.factor"
-                    :options="factors"
+                    :options="factorOptions"
                     required
                 ></b-form-select>
               </b-form-group>
 
-              <b-form-group label="Change:">
-                <b-form-input
-                    v-model="form.impact.change"
-                    type="number"
+              <b-form-group label="Influence:">
+                <b-form-select
+                    v-model="form.impact.influence"
+                    :options="influences"
                     required
-                    placeholder="0"
-                ></b-form-input>
-              </b-form-group>
-
-              <b-form-group label="Unit:">
-                <b-form-input
-                    v-model="form.impact.unit"
-                    type="text"
-                    required
-                ></b-form-input>
+                ></b-form-select>
               </b-form-group>
 
               <b-form-group label="Source:">
@@ -145,9 +122,6 @@
               <b-button type="reset" variant="danger">Reset</b-button>
             </b-btn-group>
           </b-form>
-          <b-card hidden class="mt-3" header="Form Data Result">
-            <pre class="m-0">{{ form }}</pre>
-          </b-card>
         </b-card-text>
       </b-tab>
     </b-tabs>
@@ -155,53 +129,132 @@
 </template>
 
 <script>
+import InfoCard from "../components/InfoCard";
+
 export default {
   name: "Knowledge",
+  components: {
+    "info-card": InfoCard,
+  },
   data() {
     return {
+      query: {
+        tasks: [],
+        impacts: [],
+        factors: [],
+      },
+      influences: [
+        {value: "positive", text: "Positively"},
+        {value: "negative", text: "Negatively"},
+        {value: "indifferent", text: "Indifferent"},
+      ],
+      saved: true,
       type: "task",
+      display: "task",
       types: [{value: "task", text: "Task"}, {value: "factor", text: "Factor"}, {value: "impact", text: "Impact"}],
-      tasks: [{value: "v1", text: "T1"}],
-      impacts: [{value: "v1", text: "v1->v2"}],
-      factors: [{value: "v1", text: "T1"}],
+      tasks: [],
+      impacts: [],
+      factors: [],
       formValue: {},
       form: {
         task: {
           id: "",
           name: "",
-          description: ""
+          description: "",
         },
         factor: {
           id: "",
           name: "",
-          description: ""
+          description: "",
         },
         impact: {
           id: "",
           task: "",
           factor: "",
-          change: 0,
-          unit: "",
-          source: ""
+          influence: "",
+          source: "",
         },
         email: "",
         name: "",
         food: null,
-        checked: []
+        checked: [],
       },
       foods: [{text: "Select One", value: null}, "Carrots", "Beans", "Tomatoes", "Corn"],
-      show: true
+      show: true,
     };
+  },
+  computed: {
+    taskOptions() {
+      return this.query.tasks.map(task => ({value: task._id, text: task.name}));
+    },
+    factorOptions() {
+      return this.query.factors.map(factor => ({value: factor._id, text: factor.name}));
+    },
   },
   watch: {
     type() {
       this.clear();
-    }
+    },
   },
   methods: {
+    destroy(option) {
+      if (window.confirm("Delete?")) {
+        switch (this.display) {
+        case "task":
+          this.$api.deleteTask(option._id)
+            .then(() => {
+              this.query.tasks.splice(this.tasks.indexOf(option), 1);
+            });
+          break;
+        case "factor":
+          this.$api.deleteFactor(option._id)
+            .then(() => {
+              this.query.factors.splice(this.factors.indexOf(option), 1);
+            });
+          break;
+        case "impact":
+          this.$api.deleteImpact(option._id)
+            .then(() => {
+              this.query.impacts.splice(this.tasks.indexOf(option), 1);
+            });
+          break;
+        }
+      }
+    },
     onSubmit(evt) {
       evt.preventDefault();
-      console.log(this.form[this.type]);
+      switch (this.type) {
+      case "task":
+        this.$api.addTask(this.getForm())
+          .then(res => {
+            this.query.tasks.push(res.addTask);
+            this.clear();
+            this.saved = true;
+            setTimeout(() => this.saved = false, 2000);
+          });
+        break;
+      case "factor":
+        this.$api.addFactor(this.getForm())
+          .then(res => {
+            this.query.factors.push(res.addFactor);
+            this.clear();
+            this.saved = true;
+            setTimeout(() => this.saved = false, 2000);
+          });
+        break;
+      case "impact":
+        this.$api.addImpact(this.getForm())
+          .then(res => {
+            this.query.impacts.push(res.addImpact);
+            this.clear();
+            this.saved = true;
+            setTimeout(() => this.saved = false, 2000);
+          });
+        break;
+      }
+    },
+    getForm() {
+      return this.form[this.type];
     },
     clear() {
       const form = this.form[this.type];
@@ -218,14 +271,28 @@ export default {
     onReset(evt) {
       evt.preventDefault();
       this.clear();
-    }
+    },
   },
-  mounted() {
-    Promise.all([this.$api.getTasks()])
-      .then(results => {
-        console.log(results);
+  created() {
+    Promise.all([this.$api.getTasks(), this.$api.getFactors(), this.$api.getImpacts()])
+      .then(res => {
+        const tasks = res[0].tasks;
+        const factors = res[1].factors;
+        const impacts = res[2].impacts;
+
+        tasks.forEach(task => {
+          this.query.tasks.push(task);
+        });
+
+        factors.forEach(factor => {
+          this.query.factors.push(factor);
+        });
+
+        impacts.forEach(impact => {
+          this.query.impacts.push(impact);
+        });
       });
-  }
+  },
 };
 </script>
 

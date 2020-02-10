@@ -24,10 +24,10 @@ Vue.prototype.$api = api;
 
 api.authenticate()
   .then(() => {
-    console.log("Authenticated");
+    console.info("Authenticated");
   })
   .catch(error => {
-    console.log(`Token could not be requested:${error}`);
+    console.error(`Token could not be requested:${error}`);
   });
 
 new Vue({
