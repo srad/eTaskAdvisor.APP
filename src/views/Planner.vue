@@ -23,30 +23,20 @@
           </template>
         </info-card>
       </b-tab>
-
-      <b-tab title="Properties" no-body>
-        <div class="alert" v-if="properties.length === 0">
-          Empty yet.
-        </div>
-        <info-card v-bind:key="property._id" v-for="property in properties" :obj="property" v-on:destroy="destroy(property)">
-          <template v-slot:header>
-            {{property.name}}
-          </template>
-        </info-card>
-      </b-tab>
-
     </b-tabs>
   </b-card>
 </template>
 
 <script>
+import InfoCard from "../components/InfoCard";
+
 export default {
   name: "Planner",
+  components: {"info-card": InfoCard},
   data() {
     return {
       places: [],
       plans: [],
-      properties: [],
     };
   },
   methods: {

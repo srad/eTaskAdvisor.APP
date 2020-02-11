@@ -1,7 +1,7 @@
 <template>
   <b-card no-body border-variant="0">
     <b-tabs pills card>
-      <b-tab title="Tasks" active no-body @click="display='task'">
+      <b-tab title="Activities" active no-body @click="display='task'">
         <info-card v-bind:key="task._id" v-for="task in query.tasks" :obj="task" v-on:destroy="destroy(task)">
           <template v-slot:header>
             {{task.name}}
@@ -24,15 +24,15 @@
       <b-tab title="Impacts" no-body @click="display='impact'">
         <info-card v-bind:key="impact._id" deck v-for="impact in query.impacts" :obj="impact" v-on:destroy="destroy(impact)">
           <template v-slot:header>
-            <span class="badge badge-warning text-white pl-1 pr-1">{{impact.task[0].name}}</span> is affected
-            <span class="badge badge-info text-white pl-1 pr-1">{{impact.factor[0].name}}</span>
+            {{impact.task[0].name}}
+            <span class="badge text-capitalize text-right float-right" v-bind:class="{'badge-success': impact.influence==='positive', 'badge-danger': impact.influence==='negative', 'badge-warning': impact.influence==='indifferent'}">{{impact.influence}}</span>
           </template>
           <template v-slot:content>
-            {{impact.task[0].name}} affects {{impact.factor[0].name}}
-            <span class="badge"
-                  v-bind:class="{'badge-success': impact.influence==='positive', 'badge-danger': impact.influence==='negative', 'badge-warning': impact.influence==='indifferent'}">{{impact.influence}}</span>
+            <span class="badge badge-warning pl-1 pr-1">{{impact.task[0].name}}</span> is affected by
+            <span class="badge badge-info pl-1 pr-1">{{impact.factor[0].name}}</span>
+            <span class="badge ml-3" v-bind:class="{'badge-success': impact.influence==='positive', 'badge-danger': impact.influence==='negative', 'badge-warning': impact.influence==='indifferent'}">{{impact.influence}}</span>
             <br/>
-            Source: {{impact.source}}
+            Source: <a class="text-info" :href="impact.source">{{impact.source}}</a>
           </template>
         </info-card>
       </b-tab>
@@ -83,7 +83,7 @@
             </template>
 
             <template v-if="type==='impact'">
-              <b-form-group label="The task:">
+              <b-form-group label="Activity">
                 <b-form-select
                     v-model="form.impact.task"
                     :options="taskOptions"
@@ -91,7 +91,7 @@
                 ></b-form-select>
               </b-form-group>
 
-              <b-form-group label="is affected by the factor:">
+              <b-form-group label="is affected by">
                 <b-form-select
                     v-model="form.impact.factor"
                     :options="factorOptions"
@@ -99,7 +99,7 @@
                 ></b-form-select>
               </b-form-group>
 
-              <b-form-group label="Influence:">
+              <b-form-group label="Influence">
                 <b-form-select
                     v-model="form.impact.influence"
                     :options="influences"
@@ -107,7 +107,7 @@
                 ></b-form-select>
               </b-form-group>
 
-              <b-form-group label="Source:">
+              <b-form-group label="Source">
                 <b-form-input
                     v-model="form.impact.source"
                     type="text"
@@ -147,11 +147,12 @@ export default {
         {value: "positive", text: "Positively"},
         {value: "negative", text: "Negatively"},
         {value: "indifferent", text: "Indifferent"},
+        {value: "unclear", text: "Unclear"},
       ],
       saved: true,
       type: "task",
       display: "task",
-      types: [{value: "task", text: "Task"}, {value: "factor", text: "Factor"}, {value: "impact", text: "Impact"}],
+      types: [{value: "task", text: "Activity"}, {value: "factor", text: "Factor"}, {value: "impact", text: "Impact"}],
       tasks: [],
       impacts: [],
       factors: [],

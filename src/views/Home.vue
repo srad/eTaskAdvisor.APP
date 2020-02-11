@@ -13,10 +13,12 @@
       </b-row>
       <b-row>
         <b-col class="text-center">
-          <h1>eTaskPlanner</h1>
+          <h1>eTaskAdviser</h1>
           <h4 class="m-4 text-dark">
-            This app aims to inform and support you about how to improve your learning process.
+            This app will help you to improve your learning process with the latest knowledge from research
           </h4>
+          <br/>
+          <b-button variant="outline-light" size="lg" class="w-75">start</b-button>
         </b-col>
       </b-row>
       <b-row class="mt-5" hidden>
@@ -63,7 +65,7 @@
 
 <script>
 export default {
-  name: "Home"
+  name: "Home",
 };
 </script>
 

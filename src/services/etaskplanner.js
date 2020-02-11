@@ -101,7 +101,7 @@ class Api {
    * @returns {Promise<AxiosResponse<T>>}
    */
   getPlaces() {
-    return this._query("places { _id name }");
+    return this._query("places { _id name factor { _id name description } }");
   }
 
   /**
@@ -109,6 +109,31 @@ class Api {
    */
   getFactors() {
     return this._query("factors { _id name description }");
+  }
+
+  /**
+   * @returns {Promise<AxiosResponse<T>>}
+   */
+  getPlaceFactors({place}) {
+    return this._query(`placeFactors(place: "${place}") { _id factor { _id name description }`);
+  }
+
+  /**
+   * @param {{name: String, description: String}} task
+   * @returns {Promise<AxiosResponse<{id: String, name: String, description: String}>>}
+   */
+  addPlaceFactor({place, factor}) {
+    return this._mutate(`addPlaceFactor(place:"${place}", factor:"${factor}") {
+        _id, factor { _id, description
+      }`);
+  }
+
+  /**
+   * @param id
+   * @returns {Promise<AxiosResponse<T>>}
+   */
+  deletePlaceFactor(id) {
+    return this._mutate(`deletePlaceFactor(id:"${id}")`);
   }
 
   /**

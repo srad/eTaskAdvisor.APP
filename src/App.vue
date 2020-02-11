@@ -4,7 +4,7 @@
       <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
       <router-link to="/">
         <b-navbar-brand class="font-weight-bold text-white">
-          eTaskPlanner
+          eTaskAdviser
           <font-awesome-icon icon="graduation-cap" class="ml-3 text-white"/>
         </b-navbar-brand>
       </router-link>
