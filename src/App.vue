@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <b-navbar toggleable="sm" type="light" variant="primary" fixed="top">
+    <b-navbar id="nav" toggleable="sm" type="light" variant="primary" class="navbar-default navbar-static-top">
       <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
       <router-link to="/">
         <b-navbar-brand class="font-weight-bold text-white">
-          eTaskAdviser
-          <font-awesome-icon icon="graduation-cap" class="ml-3 text-white"/>
+          eTaskAdvisor
+          <font-awesome-icon icon="hands-helping" class="ml-3 text-white"/>
         </b-navbar-brand>
       </router-link>
 
@@ -28,7 +28,9 @@
         <h2>{{title}}</h2>
         <hr/>
       </template>
-      <router-view/>
+      <transition name="fade" mode="out-in">
+        <router-view/>
+      </transition>
     </b-container>
   </div>
 </template>
@@ -46,7 +48,10 @@ export default {
     };
   },
   watch: {
-    $route(to) {
+    $route(to, from) {
+      const toDepth = to.path.split("/").length;
+      const fromDepth = from.path.split("/").length;
+      this.transitionName = toDepth < fromDepth ? "slide-right" : "slide-left";
       this.title = to.name;
     },
   },
@@ -55,11 +60,4 @@ export default {
 
 <style lang="scss">
 @import "assets/main.scss";
-
-body {
-  overflow-x: hidden;
-  overflow-y: scroll;
-  padding-top: 4rem;
-  padding-bottom: 1rem;
-}
 </style>

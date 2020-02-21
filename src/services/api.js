@@ -55,7 +55,7 @@ class Api {
   }
 
   /**
-   * @param query
+   * @param {String} query
    * @returns {Promise<AxiosResponse<T>>}
    * @private
    */
@@ -86,15 +86,15 @@ class Api {
   /**
    * @returns {Promise<AxiosResponse<T>>}
    */
-  getTasks() {
-    return this._query("tasks { _id name description }");
+  getActivities() {
+    return this._query("activities { _id name description }");
   }
 
   /**
    * @returns {Promise<AxiosResponse<T>>}
    */
   getPlans() {
-    return this._query("plans { _id task { name } subject from duration }");
+    return this._query("plans { _id activitie { name } subject from duration }");
   }
 
   /**
@@ -117,10 +117,10 @@ class Api {
   getPlaceFactors({place}) {
     return this._query(`placeFactors(place: "${place}") { _id factor { _id name description }`);
   }
-
   /**
-   * @param {{name: String, description: String}} task
-   * @returns {Promise<AxiosResponse<{id: String, name: String, description: String}>>}
+   * @param place
+   * @param factor
+   * @returns {Promise<AxiosResponse<T>>}
    */
   addPlaceFactor({place, factor}) {
     return this._mutate(`addPlaceFactor(place:"${place}", factor:"${factor}") {
@@ -140,15 +140,15 @@ class Api {
    * @returns {Promise<AxiosResponse<T>>}
    */
   getImpacts() {
-    return this._query("impacts { _id, task { name }, factor { name }, influence, source }");
+    return this._query("impacts { _id, activity { _id, name }, factor { _id, name }, influence, source }");
   }
 
   /**
-   * @param {{name: String, description: String}} task
+   * @param {{name: String, description: String}} activity
    * @returns {Promise<AxiosResponse<{id: String, name: String, description: String}>>}
    */
-  addTask(task) {
-    return this._mutate(`addTask(name:"${task.name}", description:"${task.description}") {
+  addActivity(activity) {
+    return this._mutate(`addActivity(name:"${activity.name}", description:"${activity.description}") {
         _id, name, description
       }`);
   }
@@ -157,8 +157,8 @@ class Api {
    * @param {String} id
    * @returns {Promise<AxiosResponse<T>>}
    */
-  deleteTask(id) {
-    return this._mutate(`deleteTask(id:"${id}")`);
+  deleteActivity(id) {
+    return this._mutate(`deleteActivity(id:"${id}")`);
   }
 
   /**
@@ -180,12 +180,12 @@ class Api {
   }
 
   /**
-   * @param {{name: String, description: String}} task
+   * @param {{name: String, description: String, activity: String, influence: String}} task
    * @returns {Promise<AxiosResponse<{id: String, name: String, description: String}>>}
    */
   addImpact(impact) {
-    return this._mutate(`addImpact(factor: "${impact.factor}", task: "${impact.task}", influence: ${impact.influence}, source: "${impact.source}") {
-        _id, task { name }, factor { name }, influence, source
+    return this._mutate(`addImpact(factor: "${impact.factor}", activity: "${impact.activity}", influence: ${impact.influence}, source: "${impact.source}") {
+        _id, activity { name }, factor { name }, influence, source
       }`);
   }
 

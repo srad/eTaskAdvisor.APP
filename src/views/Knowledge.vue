@@ -1,17 +1,17 @@
 <template>
   <b-card no-body border-variant="0">
     <b-tabs pills card>
-      <b-tab title="Activities" active no-body @click="display='task'">
-        <info-card v-bind:key="task._id" v-for="task in query.tasks" :obj="task" v-on:destroy="destroy(task)">
+      <b-tab title="Activities" active no-body @click="display='activity'">
+        <info-card v-bind:key="activity._id" v-for="activity in query.activities" :obj="activity" v-on:destroy="destroy(activity)">
           <template v-slot:header>
-            {{task.name}}
+            {{activity.name}}
           </template>
           <template v-slot:content>
-            {{task.description}}
+            {{activity.description}}
           </template>
         </info-card>
       </b-tab>
-      <b-tab title="Factors" no-body class="p-2" @click="display='factor'">
+      <b-tab title="Factors" no-body class="bg-light border-0" @click="display='factor'">
         <info-card v-bind:key="factor._id" v-for="factor in query.factors" :obj="factor" v-on:destroy="destroy(factor)">
           <template v-slot:header>
             {{factor.name}}
@@ -22,19 +22,28 @@
         </info-card>
       </b-tab>
       <b-tab title="Impacts" no-body @click="display='impact'">
+        <b-form inline class="p-2 bg-light mb-2">
+          <label class="mr-sm-2 text-bold">Filter</label>
+          <b-form-select class="mr-2" v-model="filterActivity" :options="[''].concat(activityOptions)"></b-form-select>
+          <b-form-select v-model="filterFactor" :options="[''].concat(factorOptions)"></b-form-select>
+        </b-form>
+
         <info-card v-bind:key="impact._id" deck v-for="impact in query.impacts" :obj="impact" v-on:destroy="destroy(impact)">
           <template v-slot:header>
-            {{impact.task[0].name}}
+            {{impact.activity[0].name}}
             <span class="badge text-capitalize text-right float-right" v-bind:class="{'badge-success': impact.influence==='positive', 'badge-danger': impact.influence==='negative', 'badge-warning': impact.influence==='indifferent'}">{{impact.influence}}</span>
           </template>
           <template v-slot:content>
-            <span class="badge badge-warning pl-1 pr-1">{{impact.task[0].name}}</span> is affected by
+            <span class="badge badge-warning pl-1 pr-1">{{impact.activity[0].name}}</span> is affected by
             <span class="badge badge-info pl-1 pr-1">{{impact.factor[0].name}}</span>
             <span class="badge ml-3" v-bind:class="{'badge-success': impact.influence==='positive', 'badge-danger': impact.influence==='negative', 'badge-warning': impact.influence==='indifferent'}">{{impact.influence}}</span>
             <br/>
             Source: <a class="text-info" :href="impact.source">{{impact.source}}</a>
           </template>
         </info-card>
+      </b-tab>
+      <b-tab title="Node">
+        <node-editor/>
       </b-tab>
       <b-tab title="Add">
         <b-alert variant="success" v-if="saved">
@@ -49,17 +58,17 @@
         <hr/>
         <b-card-text>
           <b-form @submit="onSubmit" @reset="onReset">
-            <template v-if="type==='task'">
+            <template v-if="type==='activity'">
               <b-form-group label="Name:">
                 <b-form-input
-                    v-model="form.task.name"
+                    v-model="form.activity.name"
                     type="text"
                     required
                 ></b-form-input>
               </b-form-group>
               <b-form-group label="Description:">
                 <b-form-textarea
-                    v-model="form.task.description"
+                    v-model="form.activity.description"
                     required
                 ></b-form-textarea>
               </b-form-group>
@@ -85,8 +94,8 @@
             <template v-if="type==='impact'">
               <b-form-group label="Activity">
                 <b-form-select
-                    v-model="form.impact.task"
-                    :options="taskOptions"
+                    v-model="form.impact.activity"
+                    :options="activityOptions"
                     required
                 ></b-form-select>
               </b-form-group>
@@ -130,16 +139,18 @@
 
 <script>
 import InfoCard from "../components/InfoCard";
+import NodeEditor from "../components/NodeEditor";
 
 export default {
   name: "Knowledge",
   components: {
     "info-card": InfoCard,
+    "node-editor": NodeEditor,
   },
   data() {
     return {
       query: {
-        tasks: [],
+        activities: [],
         impacts: [],
         factors: [],
       },
@@ -149,16 +160,18 @@ export default {
         {value: "indifferent", text: "Indifferent"},
         {value: "unclear", text: "Unclear"},
       ],
+      filterActivity: "",
+      filterFactor: "",
       saved: true,
-      type: "task",
-      display: "task",
-      types: [{value: "task", text: "Activity"}, {value: "factor", text: "Factor"}, {value: "impact", text: "Impact"}],
-      tasks: [],
+      type: "activity",
+      display: "activity",
+      types: [{value: "activity", text: "Activity"}, {value: "factor", text: "Factor"}, {value: "impact", text: "Impact"}],
+      activities: [],
       impacts: [],
       factors: [],
       formValue: {},
       form: {
-        task: {
+        activity: {
           id: "",
           name: "",
           description: "",
@@ -170,7 +183,7 @@ export default {
         },
         impact: {
           id: "",
-          task: "",
+          activity: "",
           factor: "",
           influence: "",
           source: "",
@@ -185,8 +198,8 @@ export default {
     };
   },
   computed: {
-    taskOptions() {
-      return this.query.tasks.map(task => ({value: task._id, text: task.name}));
+    activityOptions() {
+      return this.query.activities.map(activity => ({value: activity._id, text: activity.name}));
     },
     factorOptions() {
       return this.query.factors.map(factor => ({value: factor._id, text: factor.name}));
@@ -196,15 +209,21 @@ export default {
     type() {
       this.clear();
     },
+    filterActivity(val) {
+      this.impacts.forEach(i => i.$show = i.activity._id === val);
+    },
+    filterFactor(val) {
+      this.impacts.forEach(i => i.$show = i.factor._id === val);
+    },
   },
   methods: {
     destroy(option) {
       if (window.confirm("Delete?")) {
         switch (this.display) {
-        case "task":
-          this.$api.deleteTask(option._id)
+        case "activity":
+          this.$api.deleteActivity(option._id)
             .then(() => {
-              this.query.tasks.splice(this.tasks.indexOf(option), 1);
+              this.query.activities.splice(this.activities.indexOf(option), 1);
             });
           break;
         case "factor":
@@ -216,7 +235,7 @@ export default {
         case "impact":
           this.$api.deleteImpact(option._id)
             .then(() => {
-              this.query.impacts.splice(this.tasks.indexOf(option), 1);
+              this.query.impacts.splice(this.activities.indexOf(option), 1);
             });
           break;
         }
@@ -225,10 +244,10 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       switch (this.type) {
-      case "task":
-        this.$api.addTask(this.getForm())
+      case "activity":
+        this.$api.addActivity(this.getForm())
           .then(res => {
-            this.query.tasks.push(res.addTask);
+            this.query.activities.push(res.addActivity);
             this.clear();
             this.saved = true;
             setTimeout(() => this.saved = false, 2000);
@@ -275,14 +294,14 @@ export default {
     },
   },
   created() {
-    Promise.all([this.$api.getTasks(), this.$api.getFactors(), this.$api.getImpacts()])
+    Promise.all([this.$api.getActivities(), this.$api.getFactors(), this.$api.getImpacts()])
       .then(res => {
-        const tasks = res[0].tasks;
+        const activities = res[0].activities;
         const factors = res[1].factors;
         const impacts = res[2].impacts;
 
-        tasks.forEach(task => {
-          this.query.tasks.push(task);
+        activities.forEach(activity => {
+          this.query.activities.push(activity);
         });
 
         factors.forEach(factor => {
@@ -290,6 +309,7 @@ export default {
         });
 
         impacts.forEach(impact => {
+          impact.$show = true;
           this.query.impacts.push(impact);
         });
       });

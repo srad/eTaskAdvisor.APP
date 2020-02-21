@@ -25,7 +25,6 @@
           </template>
         </info-card>
       </b-tab>
-
     </b-tabs>
   </b-card>
 </template>

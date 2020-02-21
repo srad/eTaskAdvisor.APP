@@ -3,13 +3,13 @@ import App from "./App.vue";
 import router from "./router";
 import {BootstrapVue} from "bootstrap-vue";
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {faHeart, faAward, faGraduationCap, faStar, faBrain, faSchool, faUniversity, faCheck, faRobot, faTimes, faMedal, faLaughBeam, faHeartBroken, faTrophy, faStopwatch, faDice, faQuestion, faSkullCrossbones} from "@fortawesome/free-solid-svg-icons";
+import {faHeart, faPortrait, faHandsHelping, faUserSecret, faAward, faGraduationCap, faStar, faBrain, faSchool, faUniversity, faCheck, faRobot, faTimes, faMedal, faLaughBeam, faHeartBroken, faTrophy, faStopwatch, faDice, faQuestion, faSkullCrossbones} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import {Api} from "./services/etaskplanner";
+import {Api} from "./services/api";
 
 Vue.use(BootstrapVue);
 
-library.add(faHeart, faAward, faGraduationCap, faBrain, faSchool, faUniversity, faStar, faCheck, faRobot, faTimes, faMedal, faLaughBeam, faHeartBroken, faTrophy, faStopwatch, faDice, faQuestion, faSkullCrossbones);
+library.add(faHeart, faAward, faPortrait, faHandsHelping, faUserSecret, faGraduationCap, faBrain, faSchool, faUniversity, faStar, faCheck, faRobot, faTimes, faMedal, faLaughBeam, faHeartBroken, faTrophy, faStopwatch, faDice, faQuestion, faSkullCrossbones);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
