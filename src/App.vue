@@ -12,25 +12,22 @@
       <b-collapse id="nav-text-collapse" is-nav>
         <b-navbar-nav>
           <!-- <b-nav-item v-for="route in $router.options.routes" :key="route.path"> -->
-          <b-nav-item v-for="route in allroutes" :key="route.path">
+          <b-nav-item v-for="route in allroutes" :key="route.name">
             <router-link
-                :to="route.path"
                 class="btn btn-block text-left text-white"
-                :active-class="route.name!=='Welcome'?'text-dark':''"
-            >{{route.title}}
+                :to="{name: route.name}"
+                :active-class="route.name!=='Home'?'text-dark':''"
+            >{{route.meta.title}}
             </router-link>
           </b-nav-item>
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <b-container fluid>
-      <template v-if="$route.name!=='Welcome'">
-        <h2>{{title}}</h2>
-        <hr/>
+    <b-container fluid class="p-3 pl-4 pr-4" :class="{'poster' : $route.meta.poster}">
+      <template v-if="$route.meta.header !== false || $route.name !== 'Home'">
+        <h2 class="mb-3">{{$route.meta.title}}</h2>
       </template>
-      <transition name="fade" mode="out-in">
-        <router-view/>
-      </transition>
+      <router-view/>
     </b-container>
   </div>
 </template>
@@ -40,24 +37,19 @@ import router from "./router";
 
 export default {
   name: "App",
-  components: {},
   data() {
     return {
       title: this.$route.name,
       allroutes: router.options.routes,
     };
   },
-  watch: {
-    $route(to, from) {
-      const toDepth = to.path.split("/").length;
-      const fromDepth = from.path.split("/").length;
-      this.transitionName = toDepth < fromDepth ? "slide-right" : "slide-left";
-      this.title = to.name;
-    },
-  },
 };
 </script>
 
 <style lang="scss">
 @import "assets/main.scss";
+
+#nav {
+  z-index: 1000;
+}
 </style>

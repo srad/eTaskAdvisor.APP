@@ -2,8 +2,9 @@
 $primary: #9BC53D;
 $secondary: #9e9e9e;
 $light: #eeeeee;
+$danger: rgba(203, 17, 58, 0.76);
 $body-bg: #fafafa;
-$border-radius: 2px;
+$border-radius: 1px;
 $table-cell-padding: 0.3rem;
 
 // Bootstrap and its default variables
@@ -15,6 +16,18 @@ $table-cell-padding: 0.3rem;
   font-weight: bold;
 }
 
-#nav {
-  margin-bottom: 0.6rem;
+.text-sm {
+  font-size: $font-size-sm;
+}
+
+.poster {
+  background: repeat url("assets/bg.jpg");
+}
+
+html, body, #app, #app .container-fluid {
+  width: 100%;
+  height: 100%;
+  top: 100%;
+  left: 0;
+  right: 0;
 }
