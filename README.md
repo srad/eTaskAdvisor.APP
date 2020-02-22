@@ -1,4 +1,6 @@
-# etaskadvisor
+# eTaskAdvisor.App
+
+[![Build Status](http://sedrad.com:8080/buildStatus/icon?job=eTaskAdvisor.App)](http://sedrad.com:8080/job/eTaskAdvisor.App/)
 
 ## Project setup
 ```

@@ -39,7 +39,7 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.config.productionTip = false;
 
 Vue.prototype.$log = function (...args) {
-  console.log(...args);
+  window.console.log(...args);
 };
 
 const api = new Api();
@@ -47,7 +47,7 @@ Vue.prototype.$api = api;
 
 api.authenticate()
   .then(() => {
-    console.info("Authenticated");
+    window.console.info("Authenticated");
     new Vue({
       router,
       render: h => h(App),
@@ -55,5 +55,5 @@ api.authenticate()
   })
   .catch(error => {
     alert(error);
-    console.error(`Token could not be requested:${error}`);
+    window.console.error(`Token could not be requested:${error}`);
   });
