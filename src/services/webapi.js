@@ -68,9 +68,10 @@ const store = window.localStorage;
  * @property {Number} [taskId]
  * @property {Number} activityId
  * @property {String} subject
- * @property {String} [at]
- * @property {Number} [duration]
+ * @property {String} at
+ * @property {Number} duration
  * @property {Activity} [activity]
+ * @property {boolean} done
  */
 
 /**
@@ -258,6 +259,15 @@ class Api {
     const p = parseInt(String(task.duration));
     task.duration = isNaN(p) ? null : p;
     return handleRequest(this.axios.post(`${API_URL}/clients/tasks`, task));
+  }
+
+  /**
+   * @param {number} taskId
+   * @param {boolean} done
+   * @returns {Promise<void|AxiosResponse<Activity|Task|Influence|Factor|Affect|*[]>>}
+   */
+  doneTask(task) {
+    return handleRequest(this.axios.post(`${API_URL}/clients/done`, task));
   }
 
   /**

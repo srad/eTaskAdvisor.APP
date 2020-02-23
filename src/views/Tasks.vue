@@ -12,7 +12,7 @@
       <b-col>
         <b-row>
           <b-col>
-            <info-card v-bind:key="task.taskId" v-for="(task, index) in tasks" :obj="task" v-on:destroy="destroy(task)">
+            <info-card class="grey-all" :class="{'op-07': task.done}" v-bind:key="task.taskId" v-for="(task, index) in tasks" :obj="task" v-on:destroy="destroy(task)">
               <template v-slot:header>
                 #{{index+1}} {{task.subject}}
               </template>
@@ -21,6 +21,13 @@
               </template>
               <template v-slot:footer>
                 {{task.at}} / {{task.duration}}min
+                <b-button class="float-right shadow-sm" size="sm" :variant="task.done?'success':'secondary'" @click="done(task)">
+                  <span v-if="task.done">
+                    Completed
+                    <font-awesome-icon icon="check"/>
+                  </span>
+                  <span v-else>Done</span>
+                </b-button>
               </template>
             </info-card>
             <b-alert :show="tasks.length===0" variant="primary">
@@ -33,19 +40,6 @@
             </b-alert>
           </b-col>
         </b-row>
-      </b-col>
-    </b-row>
-    <hr/>
-    <b-row v-if="!loading">
-      <b-col>
-        <b-alert show>
-          <b-row>
-            <b-col>This device is anonymously registered on our server.</b-col>
-            <b-col cols="4" class="text-right">
-              <font-awesome-icon icon="user-secret" size="3x" class="text-dark"/>
-            </b-col>
-          </b-row>
-        </b-alert>
       </b-col>
     </b-row>
 
@@ -131,6 +125,11 @@ export default {
     },
   },
   methods: {
+    done(task) {
+      this.$api.doneTask({taskId: task.taskId, done: !task.done})
+        .then(() => task.done = !task.done)
+        .catch(() => alert("Error!"));
+    },
     addTask() {
       this.reset();
       this.$bvModal.show("addTask");
