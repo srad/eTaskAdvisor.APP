@@ -10,24 +10,25 @@
     <b-row v-if="!loading">
       <b-col class="app-bar-padding">
         <b-tabs pills card>
-          <b-tab title="Tasks" active no-body active>
+          <b-tab title="Tasks" no-body active>
             <b-row>
               <b-col>
-                <info-card class="grey-all" :class="{'op-07': task.done}" v-bind:key="task.taskId" v-for="(task, index) in openTasks" :obj="task" v-on:destroy="destroy(task)">
+                <info-card class="grey-all" footer-class="justify-content-end" v-bind:key="task.taskId" v-for="(task, index) in openTasks" :obj="task" v-on:destroy="destroy(task)">
                   <template v-slot:header>
                     #{{index+1}} {{task.subject}}
                   </template>
                   <template v-slot:content>
                     {{task.activity.name}}
+                    <hr/>
+                    {{task.at}} / {{task.duration}}min
                   </template>
                   <template v-slot:footer>
-                    {{task.at}} / {{task.duration}}min
-                    <b-button class="float-right shadow-sm" size="sm" :variant="task.done?'success':'secondary'" @click="done(task)">
-                  <span v-if="task.done">
-                    Completed
-                    <font-awesome-icon icon="check"/>
-                  </span>
-                      <span v-else>Done</span>
+                    <b-button class="shadow-sm" size="sm" :variant="task.done?'success':'secondary'" @click="done(task)">
+                      <span v-if="task.done">
+                        Completed
+                        <font-awesome-icon icon="check"/>
+                      </span>
+                      <span v-else>Done?</span>
                     </b-button>
                   </template>
                 </info-card>
@@ -43,16 +44,17 @@
             </b-row>
           </b-tab>
           <b-tab title="Completed" no-body>
-            <info-card class="grey-all" :class="{'op-07': task.done}" v-bind:key="task.taskId" v-for="(task, index) in completedTasks" :obj="task" v-on:destroy="destroy(task)">
+            <info-card class="grey-all" footer-class="justify-content-end" v-bind:key="task.taskId" v-for="(task, index) in completedTasks" :obj="task" v-on:destroy="destroy(task)">
               <template v-slot:header>
-                #{{index+1}} {{task.subject}}
+                <span style="text-decoration: line-through">#{{index+1}} {{task.subject}}</span>
               </template>
               <template v-slot:content>
                 {{task.activity.name}}
+                <hr/>
+                {{task.at}} / {{task.duration}}min
               </template>
               <template v-slot:footer>
-                {{task.at}} / {{task.duration}}min
-                <b-button class="float-right shadow-sm" size="sm" :variant="task.done?'success':'secondary'" @click="done(task)">
+                <b-button class="shadow-sm" size="sm" :variant="task.done?'success':'secondary'" @click="done(task)">
                   <span v-if="task.done">
                     Completed
                     <font-awesome-icon icon="check"/>
@@ -169,7 +171,7 @@ export default {
           this.$api.getTasks()
             .then(res => {
               this.tasks = [];
-              res.forEach(task => this.tasks.push(task));
+              res.forEach(t => this.tasks.push(t));
             });
         })
         .catch(error => {
