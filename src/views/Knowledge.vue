@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col>
+    <b-col class="app-bar-padding">
       <b-card no-body border-variant="0" bg-variant="transparent" header-class="bg-light" body-class="p-0">
         <b-tabs pills card>
           <b-tab title="Activities" active no-body @click="view('activity')">

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card class="mb-2 text-left text-dark bg-light shadow-sm border mb-3 border-dark" header-tag="header" footer-tag="footer" header-bg-variant="dark" body-class="p-2" header-class="p-1 text-white">
+    <b-card class="mb-2 text-left text-dark shadow-sm border mb-3 border-dark" header-tag="header" footer-tag="footer" header-bg-variant="dark" body-class="p-2" header-class="p-1 text-white">
       <template v-slot:header>
         <h6 class="float-left m-0 p-1">
           <slot name="header"></slot>

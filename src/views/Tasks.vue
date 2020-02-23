@@ -1,6 +1,5 @@
 <template>
   <div>
-    <hr/>
     <b-row>
       <b-col>
         <div class="text-center" v-if="loading">
@@ -11,7 +10,7 @@
     <b-row v-if="!loading">
       <b-col>
         <b-row>
-          <b-col>
+          <b-col class="app-bar-padding">
             <info-card class="grey-all" :class="{'op-07': task.done}" v-bind:key="task.taskId" v-for="(task, index) in tasks" :obj="task" v-on:destroy="destroy(task)">
               <template v-slot:header>
                 #{{index+1}} {{task.subject}}
@@ -45,11 +44,8 @@
 
     <b-modal id="addTask" title="Add Entry" ok-only ok-variant="light" ok-title="Cancel" header-class="bg-primary" class="border-dark shadow-sm">
       <b-card-text>
-        <b-alert show>
-          All fields are required
-        </b-alert>
         <b-form @submit="submit" @reset="reset">
-          <b-form-group label="Learning Activity">
+          <b-form-group label="Learning Activity (required)">
             <b-form-select
                 type="text"
                 v-model="form.activityId"
@@ -57,18 +53,18 @@
                 required/>
           </b-form-group>
 
-          <b-form-group label="Title of this task">
+          <b-form-group label="Title of this task (required)">
             <b-form-input
                 type="text"
                 v-model="form.subject"
                 required/>
           </b-form-group>
 
-          <b-form-group label="When?">
+          <b-form-group label="When? (required)">
             <datetime type="datetime" v-model="form.at" class="form-inline form-control"></datetime>
           </b-form-group>
 
-          <b-form-group label="Duration (minutes)">
+          <b-form-group label="Duration (minutes) (required)">
             <b-form-input
                 required
                 type="range"
