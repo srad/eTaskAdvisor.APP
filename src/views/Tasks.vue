@@ -55,7 +55,7 @@
           All fields are required
         </b-alert>
         <b-form @submit="submit" @reset="reset">
-          <b-form-group label="Activity">
+          <b-form-group label="Learning Activity">
             <b-form-select
                 type="text"
                 v-model="form.activityId"
@@ -63,17 +63,15 @@
                 required/>
           </b-form-group>
 
-          <b-form-group label="Subject">
+          <b-form-group label="Title of this task">
             <b-form-input
                 type="text"
                 v-model="form.subject"
                 required/>
           </b-form-group>
 
-          <b-form-group label="Time">
-            <b-form-input
-                type="datetime-local"
-                v-model="form.at"/>
+          <b-form-group label="When?">
+            <datetime type="datetime" v-model="form.at" class="form-inline form-control"></datetime>
           </b-form-group>
 
           <b-form-group label="Duration (minutes)">
@@ -88,6 +86,7 @@
             <b-form-input
                 required
                 type="text"
+                value="0"
                 v-model="form.duration"
                 disabled
                 readonly/>
@@ -108,17 +107,18 @@
 <script>
 import InfoCard from "../components/InfoCard";
 import AppNav from "../components/AppNav";
+import {Datetime} from "vue-datetime";
 
 export default {
   name: "Tasks",
-  components: {AppNav, InfoCard},
+  components: {AppNav, InfoCard, Datetime},
   data() {
     return {
       form: {
         activityId: "",
         subject: "",
         at: "",
-        duration: "",
+        duration: 0,
       },
       activities: [],
       tasks: [],
@@ -165,6 +165,7 @@ export default {
     },
     reset() {
       Object.keys(this.form).forEach(key => this.form[key] = "");
+      this.form.duration = 0;
     },
   },
   mounted() {

@@ -117,7 +117,7 @@
         </b-tabs>
       </b-card>
 
-      <b-modal id="addEntry" title="Add Entry" ok-only ok-variant="light" ok-title="Cancel">
+      <b-modal id="addEntry" title="Add Entry" header-class="bg-primary" ok-only ok-variant="light" ok-title="Cancel">
         <b-card-text>
           <b-form @submit="onSubmit" @reset="onReset">
             <template v-if="type==='activity'">

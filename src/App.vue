@@ -23,9 +23,9 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <b-container fluid class="p-3 pl-4 pr-4" :class="{'poster' : $route.meta.poster}">
+    <b-container fluid class="pl-3 pr-3 pt-2 pb-2" :class="{'poster' : $route.meta.poster}">
       <template v-if="$route.meta.header !== false || $route.name !== 'Home'">
-        <h2 class="mb-3">{{$route.meta.title}}</h2>
+        <h3 class="mb-3">{{$route.meta.title}}</h3>
       </template>
       <router-view/>
     </b-container>

@@ -9,6 +9,7 @@ import Knowledge from "./views/Knowledge.vue";
 // import Analytics from "./views/Analytics.vue";
 import About from "./views/About.vue";
 import Guide from "./views/Guide";
+import Imprint from "./components/Imprint";
 
 Vue.use(Router);
 
@@ -20,6 +21,7 @@ export default new Router({
     // {path: "/planner", name: "Planner", component: Planner, title: "Planner"},
     // {path: "/places", name: "Places", component: Place, title: "Places"},
     {path: "/knowledge", name: "Knowledge", component: Knowledge, meta: {title: "Knowledge", poster: false}},
+    {path: "/imprint", name: "Imprint", component: Imprint, meta: {title: "Imprint"}},
     {path: "/about", name: "About", component: About, meta: {title: "About"}},
     // {path: "/analytics", name: "Analytics", component: Analytics, title: "Analytics"},
   ],

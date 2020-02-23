@@ -11,6 +11,13 @@ $table-cell-padding: 0.3rem;
 @import '~bootstrap/scss/bootstrap';
 // BootstrapVue and its default variables
 @import '~bootstrap-vue/src/index.scss';
+@import "~vue-datetime";
+
+input.vdatetime-input {
+  border: none;
+  width: 100%;
+  padding: 0;
+}
 
 .text-bold {
   font-weight: bold;
@@ -30,4 +37,9 @@ html, body, #app, #app .container-fluid {
   top: 100%;
   left: 0;
   right: 0;
+}
+
+html {
+  overflow-x: hidden;
+  overflow-y: scroll;
 }
