@@ -8,10 +8,42 @@
       </b-col>
     </b-row>
     <b-row v-if="!loading">
-      <b-col>
-        <b-row>
-          <b-col class="app-bar-padding">
-            <info-card class="grey-all" :class="{'op-07': task.done}" v-bind:key="task.taskId" v-for="(task, index) in tasks" :obj="task" v-on:destroy="destroy(task)">
+      <b-col class="app-bar-padding">
+        <b-tabs pills card>
+          <b-tab title="Tasks" active no-body>
+            <b-row>
+              <b-col>
+                <info-card class="grey-all" :class="{'op-07': task.done}" v-bind:key="task.taskId" v-for="(task, index) in openTasks" :obj="task" v-on:destroy="destroy(task)">
+                  <template v-slot:header>
+                    #{{index+1}} {{task.subject}}
+                  </template>
+                  <template v-slot:content>
+                    {{task.activity.name}}
+                  </template>
+                  <template v-slot:footer>
+                    {{task.at}} / {{task.duration}}min
+                    <b-button class="float-right shadow-sm" size="sm" :variant="task.done?'success':'secondary'" @click="done(task)">
+                  <span v-if="task.done">
+                    Completed
+                    <font-awesome-icon icon="check"/>
+                  </span>
+                      <span v-else>Done</span>
+                    </b-button>
+                  </template>
+                </info-card>
+                <b-alert :show="tasks.length===0" variant="primary">
+                  <b-row>
+                    <b-col>No tasks yet!</b-col>
+                    <b-col cols="4" class="text-right">
+                      <font-awesome-icon icon="tasks" size="3x" class="text-dark"/>
+                    </b-col>
+                  </b-row>
+                </b-alert>
+              </b-col>
+            </b-row>
+          </b-tab>
+          <b-tab title="Completed" active no-body>
+            <info-card class="grey-all" :class="{'op-07': task.done}" v-bind:key="task.taskId" v-for="(task, index) in completedTasks" :obj="task" v-on:destroy="destroy(task)">
               <template v-slot:header>
                 #{{index+1}} {{task.subject}}
               </template>
@@ -29,16 +61,8 @@
                 </b-button>
               </template>
             </info-card>
-            <b-alert :show="tasks.length===0" variant="primary">
-              <b-row>
-                <b-col>No tasks yet!</b-col>
-                <b-col cols="4" class="text-right">
-                  <font-awesome-icon icon="tasks" size="3x" class="text-dark"/>
-                </b-col>
-              </b-row>
-            </b-alert>
-          </b-col>
-        </b-row>
+          </b-tab>
+        </b-tabs>
       </b-col>
     </b-row>
 
@@ -118,6 +142,12 @@ export default {
   computed: {
     activityOptions() {
       return [{value: "", text: "[none]"}].concat(this.activities.map(activity => ({value: activity.activityId, text: activity.name})));
+    },
+    completedTasks() {
+      return this.tasks.filter(task => task.done);
+    },
+    openTasks() {
+      return this.tasks.filter(task => !task.done);
     },
   },
   methods: {
