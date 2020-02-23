@@ -23,7 +23,7 @@
         </b-navbar-nav>
       </b-collapse>
     </b-navbar>
-    <b-container fluid class="pl-3 pr-3 pt-2 pb-2" :class="{'poster' : $route.meta.poster}">
+    <b-container fluid class="pl-3 pr-3 pt-2 pb-2">
       <template v-if="$route.meta.header !== false || $route.name !== 'Home'">
         <h3 class="mb-3">{{$route.meta.title}}</h3>
       </template>
@@ -42,6 +42,23 @@ export default {
       title: this.$route.name,
       allroutes: router.options.routes,
     };
+  },
+  watch: {
+    $route(from, to) {
+      this.togglePoster();
+    },
+  },
+  methods: {
+    togglePoster() {
+      if (this.$route.meta.poster) {
+        document.body.classList.add("poster");
+      } else {
+        document.body.classList.remove("poster");
+      }
+    },
+  },
+  created() {
+    this.togglePoster();
   },
 };
 </script>

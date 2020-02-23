@@ -2,15 +2,15 @@
   <b-row>
     <b-col class="text-center" v-if="activities.length > 0">
 
-      <b-card header-bg-variant="light" header-class="bg-light" class="text-left mb-3 text-dark bg-primary shadow-sm border border-light" title="Please choose your activity">
+      <b-card header-bg-variant="light" header-class="bg-light" border-variant="light" class="text-left mb-3 text-dark bg-primary shadow-sm" title="Please choose your activity">
         <b-card-text>
-          <b-form-select :options="optionsActivities" variant="outline-dark" class="shadow-sm bg-primary border border-dark" v-model="selectedActivity"/>
+          <b-form-select :options="optionsActivities" class="shadow-sm bg-primary border-dark text-dark" v-model="selectedActivity"/>
         </b-card-text>
       </b-card>
 
       <b-card header-bg-variant="light" class="text-left text-dark bg-primary shadow-sm border mb-3 border-light" v-if="showSelection" :title="info.name">
         <b-card-text>
-          <h6>{{activity.description}}</h6>
+          <h6><span class="font-weight-bolder">Details:</span> {{activity.description}}</h6>
           <router-link class="btn btn-dark float-right shadow-sm" :to="{ name: 'Tasks', params: { activityId: activity.activityId }}">
             Add as Task
           </router-link>

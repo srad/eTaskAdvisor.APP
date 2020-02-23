@@ -2,37 +2,19 @@ import Vue from "vue";
 import App from "./App.vue";
 import router from "./router";
 import {BootstrapVue} from "bootstrap-vue";
+
 import {library} from "@fortawesome/fontawesome-svg-core";
 import {
-  faHeart,
-  faPortrait,
-  faHandsHelping,
-  faUserSecret,
-  faAward,
-  faGraduationCap,
-  faTasks,
-  faStar,
-  faBrain,
-  faSchool,
-  faUniversity,
-  faCheck,
-  faRobot,
-  faTimes,
-  faMedal,
-  faLaughBeam,
-  faHeartBroken,
-  faTrophy,
-  faStopwatch,
-  faDice,
-  faQuestion,
-  faSkullCrossbones,
+  faHeart, faHandsHelping, faUserSecret, faGraduationCap, faTasks, faStar,
+  faBrain, faUniversity, faCheck, faHeartBroken, faStopwatch, faQuestion,
 } from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+
 import {Api} from "./services/webapi";
 
 Vue.use(BootstrapVue);
 
-library.add(faHeart, faAward, faTasks, faPortrait, faHandsHelping, faUserSecret, faGraduationCap, faBrain, faSchool, faUniversity, faStar, faCheck, faRobot, faTimes, faMedal, faLaughBeam, faHeartBroken, faTrophy, faStopwatch, faDice, faQuestion, faSkullCrossbones);
+library.add(faHeart, faTasks, faHandsHelping, faUserSecret, faGraduationCap, faBrain, faUniversity, faStar, faCheck, faHeartBroken, faStopwatch, faQuestion);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 
@@ -45,6 +27,7 @@ Vue.prototype.$log = function (...args) {
 const api = new Api();
 Vue.prototype.$api = api;
 
+// Only launch APP if connected to server.
 api.authenticate()
   .then(() => {
     window.console.info("Authenticated");

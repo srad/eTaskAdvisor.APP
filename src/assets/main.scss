@@ -6,6 +6,7 @@ $danger: rgba(203, 17, 58, 0.76);
 $body-bg: #fafafa;
 $border-radius: 1px;
 $table-cell-padding: 0.3rem;
+$table-cell-padding: 0.4rem;
 
 // Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap';
@@ -27,8 +28,37 @@ input.vdatetime-input {
   font-size: $font-size-sm;
 }
 
+.op-05 {
+  opacity: 0.5;
+}
+
+.op-06 {
+  opacity: 0.6;
+}
+
+.op-07 {
+  opacity: 0.7;
+}
+
+.op-08 {
+  opacity: 0.8;
+}
+
+.border-dark td {
+  border-color: $dark;
+}
+
+.border-primary td {
+  border-color: $primary;
+}
+
+.border-secondary td {
+  border-color: $secondary;
+}
+
 .poster {
   background: repeat url("assets/bg.jpg");
+  background-size: 100%;
 }
 
 html, body, #app, #app .container-fluid {

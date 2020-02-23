@@ -4,9 +4,9 @@
       <b-card no-body border-variant="0" bg-variant="transparent" header-class="bg-light" body-class="p-0">
         <b-tabs pills card>
           <b-tab title="Activities" active no-body @click="view('activity')">
-            <table class="d-none d-md-table text-sm table-sm table-hover table table-bordered">
-              <thead class="bg-light">
-              <th>Name</th>
+            <table class="d-none d-md-table table table-light shadow-sm table-hover table-bordered border-secondary border">
+              <thead class="thead-dark">
+              <th width="25%">Name</th>
               <th>Description</th>
               <th width="10%">Delete</th>
               </thead>
@@ -32,9 +32,9 @@
           </b-tab>
 
           <b-tab title="Factors" no-body class=" border-0" @click="view('factor')">
-            <table class="d-none d-md-table text-sm table-sm table-hover table table-bordered">
-              <thead class="bg-light">
-              <th width="20%">Name</th>
+            <table class="d-none d-md-table table table-light shadow-sm table-hover table-bordered border-secondary border">
+              <thead class="thead-dark">
+              <th width="25%">Name</th>
               <th>Description</th>
               <th width="10%">Delete</th>
               </thead>
@@ -67,7 +67,7 @@
               <b-button class="ml-2" variant="outline-dark" size="sm" disabled>Count: {{filteredAffects.length}}</b-button>
             </b-form>
 
-            <table class="d-none d-md-table text-sm table-sm table-hover table table-bordered">
+            <table v-show="false" class="d-none text-sm table-sm table-hover table table-bordered bg-light">
               <thead class="bg-light">
               <th width="40%">Activity</th>
               <th width="40%">Is Affected By</th>
@@ -101,7 +101,7 @@
               </tbody>
             </table>
 
-            <info-card class="d-md-none info-card mt-2" v-bind:key="affect.affectId" deck v-for="affect in filteredAffects" :obj="affect" v-on:destroy="destroy(affect)">
+            <info-card class="info-card mt-2" v-bind:key="affect.affectId" deck v-for="affect in filteredAffects" :obj="affect" v-on:destroy="destroy(affect)">
               <template v-slot:header>{{affect.activity.name}}</template>
               <template v-slot:content>
                 <span class="badge badge-light border-secondary border shadow-sm p-2 text-monospace">{{affect.activity.name}}</span>
@@ -109,6 +109,8 @@
                 <span class="badge badge-info border-secondary border shadow-sm p-2 ml-1 text-monospace">{{affect.factor.name}}</span>
                 <span class="badge p-2 ml-1 border-secondary border shadow-sm text-monospace"
                       v-bind:class="{'badge-success': affect.influenceName==='positive', 'badge-danger': affect.influenceName==='negative', 'badge-warning': affect.influenceName==='indifferent'}">{{affect.influence.influenceDisplay}}</span>
+                <hr class="m-0 mb-2 mt-2"/>
+                {{affect.description}}
                 <hr class="m-0 mb-2 mt-2"/>
                 Source: <a class="text-info" :href="affect.source">{{affect.source}}</a>
               </template>

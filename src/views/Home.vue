@@ -1,8 +1,6 @@
 <template>
   <b-row>
-    <b-col cols="3" class="d-none d-md-block"></b-col>
-
-    <b-col class="home-message pt-4 pb-4 m-2">
+    <b-col class="home-message pt-4 pb-4 m-2 mx-auto border border-secondary shadow-sm" style="max-width: 350px;">
       <b-row>
         <b-col class="text-center">
           <h3>Welcome to</h3>
@@ -31,8 +29,6 @@
         </b-col>
       </b-row>
     </b-col>
-
-    <b-col cols="3" class="d-none d-md-block"></b-col>
   </b-row>
 </template>
 
@@ -47,7 +43,7 @@ export default {
 
 <style scoped>
 .home-message {
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 3px;
 }
 </style>
