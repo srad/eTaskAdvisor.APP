@@ -10,7 +10,7 @@
     <b-row v-if="!loading">
       <b-col class="app-bar-padding">
         <b-tabs pills card>
-          <b-tab title="Tasks" active no-body>
+          <b-tab title="Tasks" active no-body active>
             <b-row>
               <b-col>
                 <info-card class="grey-all" :class="{'op-07': task.done}" v-bind:key="task.taskId" v-for="(task, index) in openTasks" :obj="task" v-on:destroy="destroy(task)">
@@ -42,7 +42,7 @@
               </b-col>
             </b-row>
           </b-tab>
-          <b-tab title="Completed" active no-body>
+          <b-tab title="Completed" no-body>
             <info-card class="grey-all" :class="{'op-07': task.done}" v-bind:key="task.taskId" v-for="(task, index) in completedTasks" :obj="task" v-on:destroy="destroy(task)">
               <template v-slot:header>
                 #{{index+1}} {{task.subject}}
