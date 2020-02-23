@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = process.env.VUE_APP_API_URL || "http://localhost:5000";
+const API_URL = process.env.VUE_APP_API_URL;
 const TOKEN_KEY = "api-token";
 
 const store = window.localStorage;
@@ -141,6 +141,7 @@ class Api {
         "Accept": "application/json",
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({password: null}),
     });
   }
 
