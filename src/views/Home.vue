@@ -1,9 +1,9 @@
 <template>
   <b-row>
-    <b-col class="home-message pt-4 pb-4 m-2 mx-auto border border-secondary shadow-sm" style="max-width: 350px;">
+    <b-col class="home-message pt-4 pb-4 m-2 mx-auto border border-secondary shadow-sm" style="max-width: 330px;">
       <b-row>
         <b-col class="text-center">
-          <h3>Welcome to</h3>
+          <h4>Welcome to</h4>
         </b-col>
       </b-row>
 
@@ -15,7 +15,7 @@
 
       <b-row>
         <b-col class="text-center">
-          <h3>eTaskAdvisor</h3>
+          <h4>eTaskAdvisor</h4>
           <h6 class="m-4">
             This app will help you to improve your learning process with the latest knowledge from research
           </h6>
@@ -43,7 +43,7 @@ export default {
 
 <style scoped>
 .home-message {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(246, 246, 246, 0.8);
   border-radius: 3px;
 }
 </style>
