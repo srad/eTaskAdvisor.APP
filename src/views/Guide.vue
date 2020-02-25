@@ -2,7 +2,7 @@
   <b-row>
     <b-col class="text-center" v-if="activities.length > 0">
 
-      <b-card header-bg-variant="light" header-class="bg-light" border-variant="light" class="text-left mb-3 text-dark bg-primary shadow-sm" title="Please choose your activity">
+      <b-card header-bg-variant="light" header-class="bg-light" border-variant="light" class="text-left mb-3 text-dark bg-primary shadow-sm" title="Choose Learning Activity">
         <b-card-text>
           <b-form-select :options="optionsActivities" class="shadow-sm bg-primary border-dark text-dark" v-model="selectedActivity"/>
         </b-card-text>
@@ -19,11 +19,11 @@
 
       <b-card header-bg-variant="light" class="text-left text-dark bg-primary shadow-sm border border-light" v-if="showSelection" title="Factors">
         <b-card-text>
-          <table class="w-100 table m-0 table-borderless">
+          <table class="w-100 table table-sm m-0 table-borderless">
             <tbody>
             <tr v-for="affect in affects" :key="affect.affectId">
-              <td>
-                <b-button variant="outline-dark" size="sm" block class="text-left shadow-sm" @click="select(affect.factor)">{{affect.factor.name}}</b-button>
+              <td class="p-0 pb-1">
+                <b-button class="text-left" block size="sm" variant="dark" @click="select(affect.factor)">{{affect.factor.name}}</b-button>
               </td>
             </tr>
             </tbody>
@@ -32,6 +32,11 @@
       </b-card>
 
     </b-col>
+
+    <b-modal id="factorInfo" title="Factor Info" ok-only header-bg-variant="primary">
+      <h5>{{selectedFactor.name}}</h5>
+      <p>{{selectedFactor.description}}</p>
+    </b-modal>
   </b-row>
 </template>
 
@@ -40,6 +45,7 @@ export default {
   name: "Home",
   data() {
     return {
+      selectedFactor: {name: "", description: ""},
       selectedActivity: "",
       activity: "",
       info: "",
@@ -60,7 +66,8 @@ export default {
   },
   methods: {
     select(factor) {
-      alert(factor.name);
+      this.selectedFactor = factor;
+      this.$bvModal.show("factorInfo");
     },
   },
   created() {
