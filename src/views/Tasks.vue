@@ -32,9 +32,9 @@
                     </b-button>
                   </template>
                 </info-card>
-                <b-alert :show="tasks.length===0" variant="primary">
+                <b-alert :show="openTasks.length===0" variant="primary">
                   <b-row>
-                    <b-col>No tasks yet!</b-col>
+                    <b-col>No tasks</b-col>
                     <b-col cols="4" class="text-right">
                       <font-awesome-icon icon="tasks" size="3x" class="text-dark"/>
                     </b-col>
@@ -44,6 +44,14 @@
             </b-row>
           </b-tab>
           <b-tab title="Completed" no-body @click="queryDone">
+            <b-alert :show="completedTasks.length===0" variant="primary">
+              <b-row>
+                <b-col>No completed tasks yet!</b-col>
+                <b-col cols="4" class="text-right">
+                  <font-awesome-icon icon="tasks" size="3x" class="text-dark"/>
+                </b-col>
+              </b-row>
+            </b-alert>
             <info-card class="grey-all" footer-class="justify-content-end" v-bind:key="task.taskId" v-for="(task, index) in completedTasks" :obj="task" v-on:destroy="destroy(task)">
               <template v-slot:header>
                 <span style="text-decoration: line-through">#{{index+1}} {{task.subject}}</span>
