@@ -1,10 +1,13 @@
 // Your variable overrides
-$primary: #9BC53D;
-$secondary: #9e9e9e;
+$primary: #96D098;
+$secondary: #868492;
 $light: #eeeeee;
-$danger: rgba(203, 17, 58, 0.76);
+$success: #30BC9F;
+$danger: #9D3E59;
+$dark: #4A434C;
 $body-bg: #fafafa;
-$border-radius: 1px;
+$border-radius: 2px;
+$warning: #F1CF2C;
 $table-cell-padding: 0.3rem;
 $table-cell-padding: 0.4rem;
 
@@ -34,6 +37,10 @@ input.vdatetime-input {
 
 .op-06 {
   opacity: 0.6;
+}
+
+body {
+  background: #F2F0EF;
 }
 
 .op-07 {

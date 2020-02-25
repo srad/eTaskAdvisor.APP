@@ -1,7 +1,7 @@
 <template>
-  <footer class="app-nav p-2 align-middle position-fixed bg-primary border-top border-primary shadow-sm border-top border-secondary" style="height: 3.5rem; left: 0; bottom: 0; right: 0; opacity: 0.9">
+  <footer class="app-nav p-2 align-middle position-fixed bg-primary border-top border-primary shadow-sm border-top border-secondary" style="height: 3.5rem; left: 0; bottom: 0; right: 0;">
     <div class="text-right h-100">
-      <b-button :key="item.name" v-for="item in instanceItems" variant="light" class="h-100 ml-2 shadow-sm" @click="$emit('select', item.name)">{{item.label}}</b-button>
+      <b-button :key="item.name" v-for="item in instanceItems" variant="dark" class="h-100 ml-2 shadow-sm" @click="$emit('select', item.name)">{{item.label}}</b-button>
     </div>
   </footer>
 </template>

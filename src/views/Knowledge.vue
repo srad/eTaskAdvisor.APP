@@ -1,7 +1,7 @@
 <template>
   <b-row>
     <b-col class="app-bar-padding">
-      <b-tabs pills card>
+      <b-tabs pills card active-nav-item-class="text-dark">
         <b-tab title="Activities" active no-body @click="view('activity')">
           <table class="d-none d-md-table table table-light shadow-sm table-hover table-bordered border-secondary border">
             <thead class="thead-dark">
@@ -117,7 +117,7 @@
         </b-tab>
       </b-tabs>
 
-      <b-modal id="addEntry" title="Add Entry" header-class="bg-primary" ok-only ok-variant="light" ok-title="Cancel">
+      <b-modal id="addEntry" title="Add Entry" header-class="bg-primary" ok-only ok-variant="warning" ok-title="Cancel">
         <b-card-text>
           <b-form @submit="onSubmit" @reset="onReset">
             <template v-if="type==='activity'">
@@ -189,10 +189,8 @@
             </template>
 
             <hr/>
-            <b-btn-group align="right">
-              <b-button type="submit" variant="primary">Save</b-button>
-              <b-button type="reset" variant="danger">Reset</b-button>
-            </b-btn-group>
+            <b-button type="submit" variant="primary" class="mr-1">Save</b-button>
+            <b-button type="reset" variant="danger">Reset</b-button>
           </b-form>
         </b-card-text>
       </b-modal>

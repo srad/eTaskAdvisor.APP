@@ -3,9 +3,9 @@
     <b-navbar id="nav" toggleable="sm" type="light" variant="primary" class="navbar-default navbar-static-top">
       <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
       <router-link to="/">
-        <b-navbar-brand class="font-weight-bold text-white">
+        <b-navbar-brand class="font-weight-bold">
           eTaskAdvisor
-          <font-awesome-icon icon="hands-helping" class="ml-3 text-white"/>
+          <font-awesome-icon icon="hands-helping" class="ml-3"/>
         </b-navbar-brand>
       </router-link>
 

@@ -9,7 +9,7 @@
     </b-row>
     <b-row v-if="!loading">
       <b-col class="app-bar-padding">
-        <b-tabs pills card>
+        <b-tabs pills card active-nav-item-class="text-dark">
           <b-tab title="Tasks" no-body active>
             <b-row>
               <b-col>
