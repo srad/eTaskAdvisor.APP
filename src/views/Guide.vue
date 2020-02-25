@@ -33,7 +33,7 @@
 
     </b-col>
 
-    <b-modal id="factorInfo" title="Factor Info" ok-only header-bg-variant="primary">
+    <b-modal id="factorInfo" title="Factor Info" ok-only header-bg-variant="primary" header-class="text-dark" body-bg-variant="dark" footer-bg-variant="dark" header-border-variant="primary" footer-border-variant="primary">
       <h5>{{selectedFactor.name}}</h5>
       <p>{{selectedFactor.description}}</p>
     </b-modal>

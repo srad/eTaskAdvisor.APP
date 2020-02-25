@@ -1,17 +1,18 @@
 <template>
   <div>
-    <b-card class="mb-2 text-left text-dark shadow-sm border mb-2 border-dark" header-tag="header" footer-tag="footer" header-bg-variant="dark" body-class="p-0" header-class="p-1 text-white">
+    <b-card class="mb-2 text-left text-dark mb-2" border-variant="primary" header-bg-variant="primary" body-class="p-0 bg-dark text-white" header-class="p-1">
       <template v-slot:header>
         <h6 class="float-left m-0 p-1">
           <slot name="header"></slot>
         </h6>
-        <b-button class="float-right m-0 shadow-sm" @click="$emit('destroy', myObj)" size="sm" variant="danger">Delete</b-button>
       </template>
       <b-card-text class="p-2">
         <slot name="content"></slot>
       </b-card-text>
-      <b-card-footer v-if="$slots['footer']" :footer-class="'p-1 ' + instanceFooterClass" style="display: flex;" footer-bg-variant="light">
-        <slot name="footer"/>
+      <b-card-footer v-if="$slots['footer']" :footer-class="'p-0 ' + instanceFooterClass" footer-bg-variant="dark">
+        <div class="w-100 p-1" style="display: table">
+          <slot name="footer"/>
+        </div>
       </b-card-footer>
     </b-card>
   </div>

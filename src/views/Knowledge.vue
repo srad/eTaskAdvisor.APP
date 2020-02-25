@@ -3,8 +3,8 @@
     <b-col class="app-bar-padding">
       <b-tabs pills card active-nav-item-class="text-dark">
         <b-tab title="Activities" active no-body @click="view('activity')">
-          <table class="d-none d-md-table table table-light shadow-sm table-hover table-bordered border-secondary border">
-            <thead class="thead-dark">
+          <table class="d-none d-md-table table table-dark shadow-sm table-hover table-bordered">
+            <thead class="thead-primary">
             <th width="25%">Name</th>
             <th>Description</th>
             <th width="10%">Delete</th>
@@ -14,7 +14,7 @@
               <td>{{activity.name}}</td>
               <td>{{activity.description}}</td>
               <td>
-                <b-button variant="outline-danger" class="p-0" size="sm" block @click="destroy(activity)">Delete</b-button>
+                <b-button variant="danger" class="p-0" size="sm" block @click="destroy(activity)">Delete</b-button>
               </td>
             </tr>
             </tbody>
@@ -31,7 +31,7 @@
         </b-tab>
 
         <b-tab title="Factors" no-body class=" border-0" @click="view('factor')">
-          <table class="d-none d-md-table table table-light shadow-sm table-hover table-bordered border-secondary border">
+          <table class="d-none d-md-table table table-dark shadow-sm table-hover table-bordered">
             <thead class="thead-dark">
             <th width="25%">Name</th>
             <th>Description</th>
@@ -42,7 +42,7 @@
               <td>{{factor.name}}</td>
               <td>{{factor.description}}</td>
               <td>
-                <b-button variant="outline-danger" size="sm" block @click="destroy(factor)">Delete</b-button>
+                <b-button variant="danger" size="sm" block @click="destroy(factor)">Delete</b-button>
               </td>
             </tr>
             </tbody>
@@ -57,8 +57,8 @@
           </info-card>
         </b-tab>
         <b-tab title="Affects" no-body @click="view('affect')">
-          <b-form class="w-100 p-2 bg-light mb-2 d-none d-md-table">
-            <label class="mr-sm-2 text-bold">Filter</label>
+          <b-form class="w-100 p-2 mb-2 d-none d-md-table">
+            <label class="mr-sm-2 text-bold text-primary">Filter</label>
             <b-form-select style="width: 150px" class="mr-2" size="sm" v-model="filterActivity" :options="activityOptions"></b-form-select>
             <b-form-select style="width: 150px" class="mr-2" v-model="filterFactor" size="sm" :options="factorOptions"></b-form-select>
             <b-form-select style="width: 150px" v-model="filterInfluence" size="sm" :options="influenceOptions"></b-form-select>
@@ -66,11 +66,11 @@
             <b-button class="ml-2" variant="outline-dark" size="sm" disabled>Count: {{filteredAffects.length}}</b-button>
           </b-form>
 
-          <table v-show="false" class="d-none text-sm table-sm table-hover table table-bordered bg-light">
-            <thead class="bg-light">
+          <table class="d-none d-md-table text-sm table-hover table-dark table table-bordered">
+            <thead class="thead-dark">
             <th width="40%">Activity</th>
-            <th width="40%">Is Affected By</th>
-            <th width="10%">Influence</th>
+            <th width="30%">Is Affected By</th>
+            <th width="20%">Influence</th>
             <th width="10%">Delete</th>
             </thead>
             <tbody v-if="filteredAffects.length === 0">
@@ -78,13 +78,25 @@
               <td colspan="4">Nothing found</td>
             </tr>
             </tbody>
-            <tbody v-else v-for="affect in filteredAffects" :key="affect.affectId">
-            <tr style="background: rgba(155,197,61,0.05)">
-              <td>{{affect.activity.name}}</td>
-              <td>{{affect.factor.name}}</td>
-              <td>{{affect.influence.influenceDisplay}}</td>
+            <tbody v-else v-for="affect in filteredAffects" :key="affect.affectId" style="border-top: 2px double #9BC53D;">
+            <tr>
               <td>
-                <b-button variant="outline-danger" class="p-0" size="sm" block @click="destroy(affect)">Delete</b-button>
+                <span>
+                  {{affect.activity.name}}
+                </span>
+              </td>
+              <td>
+                <span>
+                {{affect.factor.name}}
+                </span>
+              </td>
+              <td>
+                <span class="p-1" v-bind:class="{'badge-success': affect.influenceName==='positive', 'badge-danger': affect.influenceName==='negative', 'badge-warning': affect.influenceName==='indifferent'}">
+                {{affect.influence.influenceDisplay}}
+                </span>
+              </td>
+              <td>
+                <b-button variant="danger" class="p-0" size="sm" block @click="destroy(affect)">Delete</b-button>
               </td>
             </tr>
             <tr>
@@ -92,7 +104,7 @@
                 {{affect.description}}
               </td>
             </tr>
-            <tr style="border-bottom: 2px double #9BC53D;">
+            <tr>
               <td colspan="4">
                 <a href="affect.source" target="_blank">{{affect.source}}</a>
               </td>
@@ -100,14 +112,15 @@
             </tbody>
           </table>
 
-          <info-card class="info-card mt-2" v-bind:key="affect.affectId" deck v-for="affect in filteredAffects" :obj="affect" v-on:destroy="destroy(affect)">
-            <template v-slot:header>{{affect.activity.name}}</template>
+          <info-card class="d-md-none mt-2" v-bind:key="affect.affectId" deck v-for="affect in filteredAffects" :obj="affect" v-on:destroy="destroy(affect)">
+            <template v-slot:header>
+              {{affect.activity.name}}
+            </template>
             <template v-slot:content>
-              <span class="badge badge-light border-secondary border shadow-sm p-2 text-monospace">{{affect.activity.name}}</span>
-              <span class="badge p-2 ml-1 text-monospace">is affected by</span>
-              <span class="badge badge-info border-secondary border shadow-sm p-2 ml-1 text-monospace">{{affect.factor.name}}</span>
-              <span class="badge p-2 ml-1 border-secondary border shadow-sm text-monospace"
-                    v-bind:class="{'badge-success': affect.influenceName==='positive', 'badge-danger': affect.influenceName==='negative', 'badge-warning': affect.influenceName==='indifferent'}">{{affect.influence.influenceDisplay}}</span>
+              <span class="text-danger m-1">{{affect.activity.name}}</span>
+              <span class="m-1">is affected by</span>
+              <span class="text-info m-1">{{affect.factor.name}}</span>:
+              <span class="m-1" v-bind:class="{'text-success': affect.influenceName==='positive', 'text-danger': affect.influenceName==='negative', 'text-warning': affect.influenceName==='indifferent'}">{{affect.influence.influenceDisplay}}</span>
               <hr class="m-0 mb-2 mt-2"/>
               {{affect.description}}
               <hr class="m-0 mb-2 mt-2"/>
@@ -117,7 +130,7 @@
         </b-tab>
       </b-tabs>
 
-      <b-modal id="addEntry" title="Add Entry" header-class="bg-primary" ok-only ok-variant="warning" ok-title="Cancel">
+      <b-modal id="addEntry" title="Add Entry" header-class="text-dark" header-border-variant="primary" header-bg-variant="primary" hide-footer body-bg-variant="dark">
         <b-card-text>
           <b-form @submit="onSubmit" @reset="onReset">
             <template v-if="type==='activity'">
@@ -189,13 +202,13 @@
             </template>
 
             <hr/>
-            <b-button type="submit" variant="primary" class="mr-1">Save</b-button>
-            <b-button type="reset" variant="danger">Reset</b-button>
+            <b-button type="submit" variant="primary" class="float-right">Save</b-button>
+            <b-button variant="danger" @click="$bvModal.hide('addEntry')">Cancel</b-button>
           </b-form>
         </b-card-text>
       </b-modal>
 
-      <app-nav :items="[{name: 'add_entry', label: 'Add Entry'}]" v-on:select="$bvModal.show('addEntry')"/>
+      <app-nav :items="[{name: 'add_entry', label: 'Add Entry'}]" v-on:select="addEntry"/>
     </b-col>
   </b-row>
 </template>
@@ -302,6 +315,10 @@ export default {
      */
   },
   methods: {
+    addEntry() {
+      this.clear();
+      this.$bvModal.show("addEntry");
+    },
     view(tab) {
       this.display = tab;
       this.type = tab;

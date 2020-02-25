@@ -17,6 +17,6 @@ export default new Router({
     {path: "/guide", name: "Guide", component: Guide, meta: {title: "Guide", header: false, poster: true}},
     {path: "/knowledge", name: "Knowledge", component: Knowledge, meta: {title: "Knowledge", poster: false}},
     {path: "/imprint", name: "Imprint", component: Iframe, props: {url: process.env.VUE_APP_URL_IMPRINT}, meta: {title: "Imprint", poster: false}},
-    {path: "/about", name: "About", component: About, meta: {title: "About"}},
+    {path: "/about", name: "About", component: About, meta: {title: "About", poster: true}},
   ],
 });

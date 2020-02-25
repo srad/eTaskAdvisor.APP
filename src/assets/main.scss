@@ -4,12 +4,21 @@ $secondary: #868492;
 $light: #eeeeee;
 $success: #30BC9F;
 $danger: #9D3E59;
-$dark: #4A434C;
+$dark: #333A44;
 $body-bg: #fafafa;
 $border-radius: 2px;
-$warning: #F1CF2C;
+$warning: #DBC481;
 $table-cell-padding: 0.3rem;
 $table-cell-padding: 0.4rem;
+$input-bg: $dark;
+$input-border-color: $primary;
+$input-color: $primary;
+$input-disabled-bg: lighten($dark, 10);
+$custom-control-label-color: $primary;
+legend {
+  color:$primary !important;
+}
+$hr-border-color: $primary;
 
 // Bootstrap and its default variables
 @import '~bootstrap/scss/bootstrap';
@@ -21,6 +30,8 @@ input.vdatetime-input {
   border: none;
   width: 100%;
   padding: 0;
+  background: $dark;
+  color: $primary;
 }
 
 .text-bold {
@@ -72,12 +83,25 @@ body {
   background-size: 100%;
 }
 
+body.poster .page-header {
+  color: $dark;
+}
+
+body:not(.poster) .page-header {
+  color: $primary;
+}
+
 html, body, #app, #app .container-fluid {
   width: 100%;
   height: 100%;
   top: 100%;
   left: 0;
   right: 0;
+  color: $light;
+}
+
+body {
+  background-color: $dark;
 }
 
 html {

@@ -25,7 +25,7 @@
     </b-navbar>
     <b-container fluid class="pl-3 pr-3 pt-3 pb-2">
       <template v-if="$route.meta.header !== false || $route.name !== 'Home'">
-        <h3 class="mb-3">{{$route.meta.title}}</h3>
+        <h3 class="mb-3 page-header">{{$route.meta.title}}</h3>
       </template>
       <router-view/>
     </b-container>
