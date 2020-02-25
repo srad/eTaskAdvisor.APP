@@ -43,7 +43,7 @@
               </b-col>
             </b-row>
           </b-tab>
-          <b-tab title="Completed" no-body>
+          <b-tab title="Completed" no-body @click="queryDone">
             <info-card class="grey-all" footer-class="justify-content-end" v-bind:key="task.taskId" v-for="(task, index) in completedTasks" :obj="task" v-on:destroy="destroy(task)">
               <template v-slot:header>
                 <span style="text-decoration: line-through">#{{index+1}} {{task.subject}}</span>
@@ -139,6 +139,7 @@ export default {
       activities: [],
       tasks: [],
       loading: true,
+      loadedDone: false,
     };
   },
   computed: {
@@ -167,36 +168,32 @@ export default {
       this.$api.addTask(this.form)
         .then(task => {
           this.$bvModal.hide("addTask");
-          // this.tasks.unshift(task);
-          this.$api.getTasks()
-            .then(res => {
-              this.tasks = [];
-              res.forEach(t => this.tasks.push(t));
-            });
+          this.tasks.unshift(task);
         })
-        .catch(error => {
-          alert(JSON.stringify(error.errors, null, 2));
-        });
+        .catch(error => alert(JSON.stringify(error.errors, null, 2)));
       return false;
     },
     destroy(task) {
       if (window.confirm("Delete?")) {
         this.$api.deleteTask({taskId: task.taskId})
-          .then(() => {
-            this.tasks.splice(this.tasks.indexOf(task), 1);
-          })
-          .catch(error => {
-            alert(error.message);
-          });
+          .then(() => this.tasks.splice(this.tasks.indexOf(task), 1))
+          .catch(error => alert(error.message));
       }
     },
     reset() {
       Object.keys(this.form).forEach(key => this.form[key] = "");
       this.form.duration = 0;
     },
+    queryDone() {
+      if (!this.loadedDone) {
+        this.loadedDone = true;
+        this.$api.getTasks({done: true})
+          .then(tasks => tasks.forEach(task => this.tasks.push(task)));
+      }
+    },
   },
   mounted() {
-    Promise.all([this.$api.getTasks(), this.$api.getActivities()])
+    Promise.all([this.$api.getTasks({done: false}), this.$api.getActivities()])
       .then(res => {
         res[0].forEach(task => this.tasks.push(task));
         res[1].forEach(activity => this.activities.push(activity));
@@ -207,6 +204,7 @@ export default {
           if (activityId) {
             this.addTask();
             this.form.activityId = activityId;
+            this.$router.replace("/tasks");
           }
         }, 100);
       });

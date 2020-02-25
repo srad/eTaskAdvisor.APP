@@ -77,7 +77,7 @@ const store = window.localStorage;
 /**
  * Does error management.
  * @param {Promise} promise
- * @returns {Promise<void|AxiosResponse<Activity|Task|Influence|Factor|Affect|*[]>>}
+ * @returns {Promise<void|Activity|Task|Influence|Factor|Affect|Activity[]|Task[]|Influence[]|Factor[]|Affect[]>}
  */
 function handleRequest(promise) {
   return new Promise((resolve, reject) => {
@@ -169,10 +169,11 @@ class Api {
   }
 
   /**
+   * @param {boolean} done
    * @returns {Promise<Task[]>}
    */
-  getTasks() {
-    return handleRequest(this.axios.get(`${API_URL}/clients/tasks`));
+  getTasks({done}) {
+    return handleRequest(this.axios.get(`${API_URL}/clients/tasks`, {params: {done}}));
   }
 
   /**
