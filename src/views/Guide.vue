@@ -2,13 +2,13 @@
   <b-row>
     <b-col class="text-center" v-if="activities.length > 0">
 
-      <b-card header-bg-variant="light" header-class="bg-light" border-variant="light" class="text-left mb-3 text-dark bg-primary shadow-sm" title="Choose Learning Activity">
+      <b-card title="Choose Learning Activity" body-bg-variant="primary" header-class="bg-light" border-variant="dark" class="text-left mb-3 text-dark shadow-sm">
         <b-card-text>
           <b-form-select :options="optionsActivities" class="shadow-sm bg-primary border-dark text-dark" v-model="selectedActivity"/>
         </b-card-text>
       </b-card>
 
-      <b-card header-bg-variant="light" class="text-left text-dark bg-primary shadow-sm border mb-3 border-light" v-if="showSelection" :title="info.name">
+      <b-card v-if="showSelection" :title="info.name" class="text-left text-dark shadow-sm mb-3" body-bg-variant="primary" border-variant="dark" >
         <b-card-text>
           <h6><span class="font-weight-bolder">Details:</span> {{activity.description}}</h6>
           <router-link class="btn btn-dark float-right shadow-sm" :to="{ name: 'Tasks', params: { activityId: activity.activityId }}">
@@ -17,7 +17,7 @@
         </b-card-text>
       </b-card>
 
-      <b-card header-bg-variant="light" class="text-left text-dark bg-primary shadow-sm border border-light" v-if="showSelection" title="Factors">
+      <b-card v-if="showSelection" title="Factors" body-bg-variant="primary" border-variant="dark" class="text-left text-dark shadow-sm">
         <b-card-text>
           <table class="w-100 table table-sm m-0 table-borderless">
             <tbody>

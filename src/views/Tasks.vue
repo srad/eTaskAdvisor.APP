@@ -2,9 +2,7 @@
   <div>
     <b-row>
       <b-col>
-        <div class="text-center" v-if="loading">
-          <b-spinner style="width: 3rem; height: 3rem;" variant="primary" label="Loading"/>
-        </div>
+        <loader :loading="loading"/>
       </b-col>
     </b-row>
     <b-row v-if="!loading">
@@ -14,9 +12,9 @@
             <b-row>
               <b-col>
 
-                <b-row v-bind:key="task.taskId" v-for="(task, index) in openTasks">
+                <b-row>
                   <b-col>
-                    <info-card class="grey-all" footer-class="justify-content-end" :obj="task" v-on:destroy="destroy(task)">
+                    <info-card v-bind:key="task.taskId" v-for="(task, index) in openTasks" class="grey-all" footer-class="justify-content-end" :obj="task" v-on:destroy="destroy(task)">
                       <template v-slot:header>
                         #{{index+1}} {{task.subject}}
                       </template>
@@ -26,20 +24,19 @@
                         <b-badge variant="warning" class="p-2">{{task.duration}}min</b-badge>
                       </template>
                       <template v-slot:footer>
-                        <b-button class="m-0 shadow-sm" @click="destroy(task)" size="sm" variant="danger">Delete</b-button>
-                        <b-button-group class="float-right">
+                        <div class="float-right">
+                          <b-button class="shadow-sm mr-1" size="sm" variant="info" @click="factors(task)">Factors</b-button>
                           <b-button class="shadow-sm" size="sm" variant="success" @click="done(task)">
-                            Completed
                             <font-awesome-icon icon="check"/>
                           </b-button>
-                          <b-button class="shadow-sm mr-1" size="sm" variant="info" @click="factors(task)">Factors</b-button>
-                        </b-button-group>
+                        </div>
                       </template>
                     </info-card>
+
                   </b-col>
                 </b-row>
 
-                <div class="border-primary border text-primary p-3" v-if="openTasks.length===0">
+                <div class="border-primary border text-primary p-3 bg-dark" v-if="openTasks.length===0">
                   <b-row>
                     <b-col>No tasks</b-col>
                     <b-col cols="4" class="text-right">
@@ -52,7 +49,7 @@
             </b-row>
           </b-tab>
           <b-tab title="Completed" no-body @click="queryDone">
-            <div class="border-primary border text-primary p-3" v-if="completedTasks.length===0">
+            <div class="border-primary border bg-dark text-primary p-3" v-if="completedTasks.length===0">
               <b-row>
                 <b-col>No completed tasks yet!</b-col>
                 <b-col cols="4" class="text-right">
@@ -70,7 +67,6 @@
                 <b-badge variant="warning" class="p-2">{{task.duration}}min</b-badge>
               </template>
               <template v-slot:footer>
-                <b-button class="m-0 shadow-sm" @click="destroy(task)" size="sm" variant="danger">Delete</b-button>
                 <b-button class="shadow-sm float-right" size="sm" variant="warning" @click="done(task)">
                   Reopen Task
                 </b-button>
@@ -81,7 +77,7 @@
       </b-col>
     </b-row>
 
-    <b-modal id="addTask" title="Add Entry" hide-footer header-class="bg-primary text-dark" header-border-variant="primary" footer-border-variant="primary" class="border-primary border" body-bg-variant="dark">
+    <b-modal id="addTask" title="Add Learning Task" hide-footer header-class="bg-primary text-dark" header-border-variant="primary" footer-border-variant="primary" class="border-primary border" body-bg-variant="dark">
       <b-card-text>
         <b-form ref="form" @submit="submit" @reset="reset">
           <b-form-group label="Learning Activity (required)">
@@ -150,10 +146,11 @@
 import InfoCard from "../components/InfoCard";
 import AppNav from "../components/AppNav";
 import {Datetime} from "vue-datetime";
+import Loader from "../components/Loader";
 
 export default {
   name: "Tasks",
-  components: {AppNav, InfoCard, Datetime},
+  components: {Loader, AppNav, InfoCard, Datetime},
   data() {
     return {
       form: {

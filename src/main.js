@@ -4,17 +4,14 @@ import router from "./router";
 import {BootstrapVue} from "bootstrap-vue";
 
 import {library} from "@fortawesome/fontawesome-svg-core";
-import {
-  faHeart, faHandsHelping, faUserSecret, faGraduationCap, faTasks, faStar,
-  faBrain, faUniversity, faCheck, faHeartBroken, faStopwatch, faQuestion,
-} from "@fortawesome/free-solid-svg-icons";
+import {faHandsHelping, faUserSecret, faTasks, faStar, faTrashAlt, faCheck, faQuestion} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
 import {Api} from "./services/webapi";
 
 Vue.use(BootstrapVue);
 
-library.add(faHeart, faTasks, faHandsHelping, faUserSecret, faGraduationCap, faBrain, faUniversity, faStar, faCheck, faHeartBroken, faStopwatch, faQuestion);
+library.add(faTasks, faHandsHelping, faUserSecret, faTrashAlt, faStar, faCheck, faQuestion);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);
 

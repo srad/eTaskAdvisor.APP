@@ -1,6 +1,6 @@
 <template>
   <b-row>
-    <b-col class="home-message pt-4 pb-4 m-2 mx-auto border border-light shadow-sm" style="max-width: 330px;">
+    <b-col class="home pt-4 pb-4 m-2 mx-auto shadow-sm bg-dark-op border border-primary" style="max-width: 330px;">
       <b-row>
         <b-col class="text-center">
           <h4>Welcome to</h4>
@@ -41,9 +41,5 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.home-message {
-  background: rgba(74, 67, 76, 0.85);
-  border-radius: 3px;
-}
+<style scoped>
 </style>

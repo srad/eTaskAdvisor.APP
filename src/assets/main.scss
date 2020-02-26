@@ -1,13 +1,12 @@
-// Your variable overrides
-$primary: #96D098;
+$primary: #96d098;
 $secondary: #868492;
 $light: #eeeeee;
-$success: #30BC9F;
-$danger: #9D3E59;
-$dark: #333A44;
+$success: #30bc9f;
+$danger: #9d3e59;
+$dark: #333a44;
 $body-bg: #fafafa;
 $border-radius: 2px;
-$warning: #DBC481;
+$warning: #dbc481;
 $table-cell-padding: 0.3rem;
 $table-cell-padding: 0.4rem;
 $input-bg: $dark;
@@ -15,15 +14,12 @@ $input-border-color: $primary;
 $input-color: $primary;
 $input-disabled-bg: lighten($dark, 10);
 $custom-control-label-color: $primary;
-legend {
-  color:$primary !important;
-}
 $hr-border-color: $primary;
 
 // Bootstrap and its default variables
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 // BootstrapVue and its default variables
-@import '~bootstrap-vue/src/index.scss';
+@import "~bootstrap-vue/src/index.scss";
 @import "~vue-datetime";
 
 input.vdatetime-input {
@@ -34,61 +30,27 @@ input.vdatetime-input {
   color: $primary;
 }
 
-.text-bold {
-  font-weight: bold;
+.tabs .nav-item {
+  background-color: $dark;
 }
 
-.text-sm {
-  font-size: $font-size-sm;
-}
+.text-sm { font-size: $font-size-sm; }
 
-.op-05 {
-  opacity: 0.5;
-}
+.border-dark td { border-color: $dark; }
 
-.op-06 {
-  opacity: 0.6;
-}
+.border-primary td { border-color: $primary; }
 
-body {
-  background: #F2F0EF;
-}
+.border-secondary td { border-color: $secondary; }
 
-.op-07 {
-  opacity: 0.7;
-}
+.app-bar-padding { padding-bottom: 3.5rem; }
 
-.op-08 {
-  opacity: 0.8;
-}
-
-.border-dark td {
-  border-color: $dark;
-}
-
-.border-primary td {
-  border-color: $primary;
-}
-
-.border-secondary td {
-  border-color: $secondary;
-}
-
-.app-bar-padding {
-  padding-bottom: 3.5rem
+.bg-dark-op {
+  background: rgba($dark, .9);
 }
 
 .poster {
   background: repeat url("assets/bg.jpg");
   background-size: 100%;
-}
-
-body.poster .page-header {
-  color: $dark;
-}
-
-body:not(.poster) .page-header {
-  color: $primary;
 }
 
 html, body, #app, #app .container-fluid {
@@ -100,11 +62,15 @@ html, body, #app, #app .container-fluid {
   color: $light;
 }
 
-body {
-  background-color: $dark;
-}
-
 html {
   overflow-x: hidden;
   overflow-y: scroll;
 }
+
+body.poster .page-header { color: $dark; }
+
+body:not(.poster) .page-header { color: $primary; }
+
+body { background-color: $dark;}
+
+legend { color: $primary !important;}
