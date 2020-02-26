@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card class="mb-2 text-left text-dark mb-2 shadow-sm"
-            border-variant="dark"
+            border-variant="primary"
             header-bg-variant="primary"
             body-class="p-0 bg-dark text-white"
             header-class="p-1">

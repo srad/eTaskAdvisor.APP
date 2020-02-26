@@ -15,9 +15,9 @@ export default new Router({
   routes: [
     {path: "/", name: "Home", component: Home, meta: {title: "Home", header: false, poster: true}},
     {path: "/sign-in", name: "SignIn", component: SignIn, meta: {title: "Sign In", header: true, poster: true}},
-    {path: "/tasks/:activityId?", name: "Tasks", component: Tasks, meta: {title: "Learning Tasks", poster: true}},
+    {path: "/tasks/:activityId?", name: "Tasks", component: Tasks, meta: {title: "Learning Tasks", poster: false}},
     {path: "/guide", name: "Guide", component: Guide, meta: {title: "Guide", header: false, poster: true}},
-    {path: "/knowledge", name: "Knowledge", component: Knowledge, meta: {title: "Knowledge", poster: true}},
+    {path: "/knowledge", name: "Knowledge", component: Knowledge, meta: {title: "Knowledge", poster: false}},
     {path: "/imprint", name: "Imprint", component: Iframe, props: {url: process.env.VUE_APP_URL_IMPRINT}, meta: {title: "Imprint", poster: false}},
     {path: "/about", name: "About", component: About, meta: {title: "About", poster: true}},
   ],

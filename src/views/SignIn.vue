@@ -24,6 +24,8 @@ export default {
         "theme": "dark",
       });
 
+      window.gapi.auth2.init();
+
       const auth2 = window.gapi.auth2.getAuthInstance();
       this.auth2 = auth2;
 
