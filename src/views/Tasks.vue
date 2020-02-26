@@ -19,9 +19,9 @@
                         #{{index+1}} {{task.subject}}
                       </template>
                       <template v-slot:content>
-                        <b-badge class="p-2 mr-1">{{task.activity.name}}</b-badge>
-                        {{task.at}}
-                        <b-badge variant="warning" class="p-2">{{task.duration}}min</b-badge>
+                        <span class="text-primary">{{task.activity.name}}</span>,
+                        <span>{{task.at}}</span>,
+                        <span class="text-warning">{{task.duration}}min</span>
                       </template>
                       <template v-slot:footer>
                         <div class="float-right">
@@ -62,9 +62,9 @@
                 <span style="text-decoration: line-through">#{{index+1}} {{task.subject}}</span>
               </template>
               <template v-slot:content>
-                <b-badge class="p-2 mr-1">{{task.activity.name}}</b-badge>
-                {{task.at}}
-                <b-badge variant="warning" class="p-2">{{task.duration}}min</b-badge>
+                <span class="text-primary">{{task.activity.name}}</span>,
+                <span>{{task.at}}</span>,
+                <span class="text-warning">{{task.duration}}min</span>
               </template>
               <template v-slot:footer>
                 <b-button class="shadow-sm float-right" size="sm" variant="warning" @click="done(task)">
@@ -125,17 +125,22 @@
       </b-card-text>
     </b-modal>
 
-    <b-modal id="factorInfo" title="Factor Info" ok-only header-bg-variant="primary">
-      <table class="w-100 table table-sm m-0 table-borderless">
-        <tbody>
-        <tr v-for="affect in affects" :key="affect.affectId">
-          <td class="p-0 pb-1">
-            <h5>{{affect.factor.name}}</h5>
-            {{affect.factor.description}}
-          </td>
-        </tr>
-        </tbody>
-      </table>
+    <b-modal id="factorInfo" :title="'Factors for: ' + selectedActivity.name" footer-border-variant="dark" body-text-variant="light" body-bg-variant="dark" header-border-variant="primary" header-class="text-dark" footer-bg-variant="dark" ok-only
+             header-bg-variant="primary">
+      <div>
+        <table class="w-100 table table-sm m-0 table-borderless">
+          <tbody>
+          <tr v-for="affect in affects" :key="affect.affectId">
+            <td class="border-primary p-0">
+              <h6 class="text-primary">{{affect.factor.name}}</h6>
+              <h6 class="text-light">{{affect.factor.description}}</h6>
+              <div class="text-primary">Influence: <span class="text-warning">{{affect.influence.influenceDisplay}}</span></div>
+              <hr/>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </b-modal>
 
     <app-nav :items="[{name: 'add_task', label: 'Add Task'}]" v-on:select="addTask"/>
@@ -147,6 +152,7 @@ import InfoCard from "../components/InfoCard";
 import AppNav from "../components/AppNav";
 import {Datetime} from "vue-datetime";
 import Loader from "../components/Loader";
+import {formatDateTime} from "../lib/time";
 
 export default {
   name: "Tasks",
@@ -159,7 +165,9 @@ export default {
         at: "",
         duration: 0,
       },
+      // In accordance to the activity a the selected task
       affects: [],
+      selectedActivity: {name: ""},
       activities: [],
       tasks: [],
       loading: true,
@@ -178,8 +186,16 @@ export default {
     },
   },
   methods: {
-    factors(factor) {
-
+    factors(task) {
+      this.selectedActivity = task.activity;
+      this.$api.getActivityAffectedBy({activityId: task.activityId})
+        .then(affects => {
+          while (this.affects.length > 0) {
+            this.affects.pop();
+          }
+          affects.forEach(affect => this.affects.push(affect));
+          this.$bvModal.show("factorInfo");
+        });
     },
     done(task) {
       this.$api.doneTask({taskId: task.taskId, done: !task.done})
@@ -215,7 +231,10 @@ export default {
       if (!this.loadedDone) {
         this.loadedDone = true;
         this.$api.getTasks({done: true})
-          .then(tasks => tasks.forEach(task => this.tasks.push(task)));
+          .then(tasks => tasks.forEach(task => {
+            task.at = formatDateTime(task.at);
+            this.tasks.push(task);
+          }));
       }
     },
   },
