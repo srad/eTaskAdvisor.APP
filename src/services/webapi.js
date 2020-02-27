@@ -69,6 +69,7 @@ const store = window.localStorage;
  * @property {Number} activityId
  * @property {String} subject
  * @property {String} at
+ * @property {String} atFormatted
  * @property {Number} duration
  * @property {Activity} [activity]
  * @property {boolean} done

@@ -20,7 +20,7 @@
                       </template>
                       <template v-slot:content>
                         <span class="text-primary">{{task.activity.name}}</span>,
-                        <span>{{task.at}}</span>,
+                        <span>{{task.atFormatted}}</span>,
                         <span class="text-warning">{{task.duration}}min</span>
                       </template>
                       <template v-slot:footer>
@@ -63,7 +63,7 @@
               </template>
               <template v-slot:content>
                 <span class="text-primary">{{task.activity.name}}</span>,
-                <span>{{task.at}}</span>,
+                <span>{{task.atFormatted}}</span>,
                 <span class="text-warning">{{task.duration}}min</span>
               </template>
               <template v-slot:footer>
@@ -152,7 +152,6 @@ import InfoCard from "../components/InfoCard";
 import AppNav from "../components/AppNav";
 import {Datetime} from "vue-datetime";
 import Loader from "../components/Loader";
-import {formatDateTime} from "../lib/time";
 
 export default {
   name: "Tasks",
@@ -231,10 +230,7 @@ export default {
       if (!this.loadedDone) {
         this.loadedDone = true;
         this.$api.getTasks({done: true})
-          .then(tasks => tasks.forEach(task => {
-            task.at = formatDateTime(task.at);
-            this.tasks.push(task);
-          }));
+          .then(tasks => tasks.forEach(task => this.tasks.push(task)));
       }
     },
   },
