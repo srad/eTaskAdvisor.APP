@@ -10,7 +10,7 @@
         <h6 class="float-left m-0 p-1">
           <slot name="header"></slot>
         </h6>
-        <b-button variant="dark" class="float-right text-primary p-1 pl-3 pr-3" @click="$emit('destroy', obj)">
+        <b-button variant="dark" class="float-right text-primary pl-3 pr-3" style="padding: 0.1rem" @click="$emit('destroy', obj)">
           <font-awesome-icon icon="trash-alt"/>
         </b-button>
       </template>
