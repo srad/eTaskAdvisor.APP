@@ -2,30 +2,32 @@
   <b-row>
     <b-col class="app-bar-padding">
       <b-tabs pills card active-nav-item-class="text-dark">
-        <b-tab title="Activities" active no-body @click="view('activity')">
+        <b-tab title="Aspects" active no-body @click="view('aspect')">
           <table class="d-none d-md-table table table-dark shadow-sm table-hover table-bordered">
             <thead class="thead-primary">
-            <th width="25%">Name</th>
-            <th>Description</th>
-            <th width="10%">Delete</th>
+              <th width="25%">Name</th>
+              <!--<th width="10%">Type</th>-->
+              <th>Description</th>
+              <th width="10%">Delete</th>
             </thead>
             <tbody>
-            <tr :key="activity.activityId" v-for="activity in activities">
-              <td>{{activity.name}}</td>
-              <td>{{activity.description}}</td>
-              <td>
-                <b-button variant="danger" class="p-0" size="sm" block @click="destroy(activity)">Delete</b-button>
-              </td>
-            </tr>
+              <tr :key="aspect.aspectId" v-for="aspect in aspects">
+                <td>{{aspect.name}}</td>
+                <!--<td>{{aspect.aspectType.typeDisplay}}</td>-->
+                <td>{{aspect.description}}</td>
+                <td>
+                  <b-button variant="danger" class="p-0" size="sm" block @click="destroy(aspect)">Delete</b-button>
+                </td>
+              </tr>
             </tbody>
           </table>
 
-          <info-card class="d-md-none mt-2" v-bind:key="activity.activityId" v-for="activity in activities" :obj="activity" v-on:destroy="destroy(activity)">
+          <info-card class="d-md-none mt-2" v-bind:key="aspect.aspectId" v-for="aspect in aspects" :obj="aspect" v-on:destroy="destroy(aspect)">
             <template v-slot:header>
-              {{activity.name}}
+              {{aspect.name}} <!--({{aspect.aspectType.typeDisplay}})-->
             </template>
             <template v-slot:content>
-              {{activity.description}}
+              {{aspect.description}}
             </template>
           </info-card>
         </b-tab>
@@ -33,18 +35,18 @@
         <b-tab title="Factors" no-body class=" border-0" @click="view('factor')">
           <table class="d-none d-md-table table table-dark shadow-sm table-hover table-bordered">
             <thead class="thead-dark">
-            <th width="25%">Name</th>
-            <th>Description</th>
-            <th width="10%">Delete</th>
+              <th width="25%">Name</th>
+              <th>Description</th>
+              <th width="10%">Delete</th>
             </thead>
             <tbody>
-            <tr :key="factor.factorId" v-for="factor in factors">
-              <td>{{factor.name}}</td>
-              <td>{{factor.description}}</td>
-              <td>
-                <b-button variant="danger" size="sm" block @click="destroy(factor)">Delete</b-button>
-              </td>
-            </tr>
+              <tr :key="factor.factorId" v-for="factor in factors">
+                <td>{{factor.name}}</td>
+                <td>{{factor.description}}</td>
+                <td>
+                  <b-button variant="danger" size="sm" block @click="destroy(factor)">Delete</b-button>
+                </td>
+              </tr>
             </tbody>
           </table>
           <info-card class="d-md-none mt-2" v-bind:key="factor._id" v-for="factor in factors" :obj="factor" v-on:destroy="destroy(factor)">
@@ -59,7 +61,7 @@
         <b-tab title="Affects" no-body @click="view('affect')">
           <b-form class="w-100 p-2 mb-2 d-none d-md-table">
             <label class="mr-sm-2 text-bold text-primary">Filter</label>
-            <b-form-select style="width: 150px" class="mr-2" size="sm" v-model="filterActivity" :options="activityOptions"></b-form-select>
+            <b-form-select style="width: 150px" class="mr-2" size="sm" v-model="filterAspect" :options="aspectOptions"></b-form-select>
             <b-form-select style="width: 150px" class="mr-2" v-model="filterFactor" size="sm" :options="factorOptions"></b-form-select>
             <b-form-select style="width: 150px" v-model="filterInfluence" size="sm" :options="influenceOptions"></b-form-select>
             <b-button class="ml-2" variant="warning" size="sm" @click="resetFilters">Reset</b-button>
@@ -68,59 +70,59 @@
 
           <table class="d-none d-md-table text-sm table-hover table-dark table table-bordered">
             <thead class="thead-dark">
-            <th width="40%">Activity</th>
-            <th width="30%">Is Affected By</th>
-            <th width="20%">Influence</th>
-            <th width="10%">Delete</th>
+              <th width="40%">Aspect</th>
+              <th width="30%">Is Affected By</th>
+              <th width="20%">Influence</th>
+              <th width="10%">Delete</th>
             </thead>
             <tbody v-if="filteredAffects.length === 0">
-            <tr>
-              <td colspan="4">Nothing found</td>
-            </tr>
+              <tr>
+                <td colspan="4">Nothing found</td>
+              </tr>
             </tbody>
             <tbody v-else v-for="affect in filteredAffects" :key="affect.affectId" style="border-top: 2px double #9BC53D;">
-            <tr>
-              <td>
+              <tr>
+                <td>
                 <span>
-                  {{affect.activity.name}}
+                  {{affect.aspect.name}}
                 </span>
-              </td>
-              <td>
+                </td>
+                <td>
                 <span>
                 {{affect.factor.name}}
                 </span>
-              </td>
-              <td>
+                </td>
+                <td>
                 <span class="p-1" v-bind:class="{'badge-success': affect.influenceName==='positive', 'badge-danger': affect.influenceName==='negative', 'badge-warning': affect.influenceName==='indifferent'}">
                 {{affect.influence.influenceDisplay}}
                 </span>
-              </td>
-              <td>
-                <b-button variant="danger" class="p-0" size="sm" block @click="destroy(affect)">Delete</b-button>
-              </td>
-            </tr>
-            <tr>
-              <td colspan="4">
-                {{affect.description}}
-              </td>
-            </tr>
-            <tr>
-              <td colspan="4">
-                <a href="affect.source" target="_blank">{{affect.source}}</a>
-              </td>
-            </tr>
+                </td>
+                <td>
+                  <b-button variant="danger" class="p-0" size="sm" block @click="destroy(affect)">Delete</b-button>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4">
+                  {{affect.description}}
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4">
+                  <a href="affect.source" target="_blank">{{affect.source}}</a>
+                </td>
+              </tr>
             </tbody>
           </table>
 
           <info-card class="d-md-none mt-2" v-bind:key="affect.affectId" deck v-for="affect in filteredAffects" :obj="affect" v-on:destroy="destroy(affect)">
             <template v-slot:header>
-              {{affect.activity.name}}
+              {{affect.aspect.name}}
             </template>
             <template v-slot:content>
-              <span class="text-danger m-1">{{affect.activity.name}}</span>
+              <span class="text-warning m-1">{{affect.aspect.name}}</span>
               <span class="m-1">is affected by</span>
-              <span class="text-info m-1">{{affect.factor.name}}</span>:
-              <span class="m-1" v-bind:class="{'text-success': affect.influenceName==='positive', 'text-danger': affect.influenceName==='negative', 'text-warning': affect.influenceName==='indifferent'}">{{affect.influence.influenceDisplay}}</span>
+              <span class="text-warning m-1">{{affect.factor.name}}</span>:
+              <span class="badge m-1" v-bind:class="{'badge-success': affect.influenceName==='positive', 'badge-danger': affect.influenceName==='negative', 'badge-warning': affect.influenceName==='indifferent'}">{{affect.influence.influenceDisplay}}</span>
               <hr class="m-0 mb-2 mt-2"/>
               {{affect.description}}
               <hr class="m-0 mb-2 mt-2"/>
@@ -133,17 +135,21 @@
       <b-modal id="addEntry" title="Add Entry" header-class="text-dark" header-border-variant="primary" header-bg-variant="primary" hide-footer body-bg-variant="dark">
         <b-card-text>
           <b-form @submit="onSubmit" @reset="onReset">
-            <template v-if="type==='activity'">
+            <template v-if="type==='aspect'">
               <b-form-group label="Name:">
                 <b-form-input
-                    v-model="form.activity.name"
+                    v-model="form.aspect.name"
                     type="text"
-                    required
-                ></b-form-input>
+                    required/>
               </b-form-group>
+
+              <b-form-group label="Type of effect:">
+                <b-form-select v-model="form.aspect.typeName" size="sm" :options="aspectTypeOptions"></b-form-select>
+              </b-form-group>
+
               <b-form-group label="Description:">
                 <b-form-textarea
-                    v-model="form.activity.description"
+                    v-model="form.aspect.description"
                     required
                 ></b-form-textarea>
               </b-form-group>
@@ -164,10 +170,10 @@
             </template>
 
             <template v-if="type==='affect'">
-              <b-form-group label="Activity">
+              <b-form-group label="Aspect">
                 <b-form-select
-                    v-model="form.affect.activityId"
-                    :options="activityOptions"
+                    v-model="form.affect.aspectId"
+                    :options="aspectOptions"
                     required
                 ></b-form-select>
               </b-form-group>
@@ -226,32 +232,35 @@ export default {
   data() {
     return {
       cache: {
-        activities: [],
+        aspects: [],
         affects: [],
+        aspectTypes: [],
         factors: [],
         influences: [],
       },
 
-      filterActivity: "",
+      filterAspect: "",
       filterFactor: "",
       filterInfluence: "",
 
       saved: true,
 
-      type: "activity",
-      display: "activity",
+      type: "aspect",
+      display: "aspect",
 
-      types: [{value: "activity", text: "Activity"}, {value: "factor", text: "Factor"}, {value: "affect", text: "Affects"}],
+      types: [{value: "aspect", text: "Aspect"}, {value: "factor", text: "Factor"}, {value: "affect", text: "Affects"}],
 
-      activities: [],
+      aspects: [],
+      aspectTypes: [],
       affects: [],
       factors: [],
       influences: [],
 
       formValue: {},
       form: {
-        activity: {
-          activityId: "",
+        aspect: {
+          aspectId: "",
+          typeName: "",
           name: "",
           description: "",
         },
@@ -262,7 +271,7 @@ export default {
         },
         affect: {
           affectId: "",
-          activityId: "",
+          aspectId: "",
           factorId: "",
           influenceName: "",
           source: "",
@@ -274,8 +283,9 @@ export default {
     };
   },
   computed: {
-    activityOptions() {
-      return [{value: "", text: "[none]"}].concat(this.cache.activities.map(activity => ({value: activity.activityId, text: activity.name})));
+    // Provide only activities here
+    aspectOptions() {
+      return [{value: "", text: "[none]"}].concat(this.cache.aspects.filter(a => a.typeName === "activity").map(aspect => ({value: aspect.aspectId, text: aspect.name})));
     },
     factorOptions() {
       return [{value: "", text: "[none]"}].concat(this.cache.factors.map(factor => ({value: factor.factorId, text: factor.name})));
@@ -283,11 +293,14 @@ export default {
     influenceOptions() {
       return [{value: "", text: "[none]"}].concat(this.cache.influences.map(influence => ({value: influence.influenceName, text: influence.influenceDisplay})));
     },
+    aspectTypeOptions() {
+      return [{value: "", text: "[none]"}].concat(this.cache.aspectTypes.map(influence => ({value: influence.typeName, text: influence.typeDisplay})));
+    },
     filteredAffects() {
       let result = this.cache.affects;
 
-      if (this.filterActivity !== "") {
-        result = result.filter(affect => affect.activityId === this.filterActivity);
+      if (this.filterAspect !== "") {
+        result = result.filter(affect => affect.aspectId === this.filterAspect);
       }
       if (this.filterFactor !== "") {
         result = result.filter(affect => affect.factorId === this.filterFactor);
@@ -305,8 +318,8 @@ export default {
     },
     /*
     filterActivity(val) {
-      while (this.activities.length > 0) {
-        this.activities.pop();
+      while (this.aspects.length > 0) {
+        this.aspects.pop();
       }
     },
     filterFactor(val) {
@@ -325,16 +338,16 @@ export default {
     },
     resetFilters() {
       this.filterInfluence = "";
-      this.filterActivity = "";
+      this.filterAspect = "";
       this.filterFactor = "";
     },
     destroy(option) {
       if (window.confirm("Delete?")) {
-        switch(this.display) {
-        case "activity":
-          this.$api.deleteActivity(option.activityId)
+        switch (this.display) {
+        case "aspect":
+          this.$api.deleteAspect(option.aspectId)
             .then(() => {
-              this.activities.splice(this.activities.indexOf(option), 1);
+              this.aspects.splice(this.aspects.indexOf(option), 1);
             });
           break;
         case "factor":
@@ -364,13 +377,13 @@ export default {
 
       const data = this.getForm();
 
-      switch(this.type) {
-      case "activity":
-        data.activityId = 0;
-        this.$api.addActivity(data)
+      switch (this.type) {
+      case "aspect":
+        data.aspectId = 0;
+        this.$api.addAspect(data)
           .then(res => {
-            this.activities.unshift(res);
-            this.cache.activities.unshift(res);
+            this.aspects.unshift(res);
+            this.cache.aspects.unshift(res);
             done();
           });
         break;
@@ -415,16 +428,23 @@ export default {
     },
   },
   created() {
-    Promise.all([this.$api.getActivities(), this.$api.getFactors(), this.$api.getAffects(), this.$api.getInfluences()])
+    Promise.all([
+      this.$api.getAspects(),
+      this.$api.getFactors(),
+      this.$api.getAffects(),
+      this.$api.getInfluences(),
+      this.$api.getAspectTypes(),
+    ])
       .then(res => {
-        const activities = res[0];
+        const aspects = res[0];
         const factors = res[1];
         const affects = res[2];
         const influences = res[3];
+        const aspectTypes = res[4];
 
-        activities.forEach(activity => {
-          this.activities.push(activity);
-          this.cache.activities.push(activity);
+        aspects.forEach(aspect => {
+          this.aspects.push(aspect);
+          this.cache.aspects.push(aspect);
         });
         factors.forEach(factor => {
           this.factors.push(factor);
@@ -437,6 +457,10 @@ export default {
         influences.forEach(influence => {
           this.influences.push(influence);
           this.cache.influences.push(influence);
+        });
+        aspectTypes.forEach(type => {
+          this.aspectTypes.push(type);
+          this.cache.aspectTypes.push(type);
         });
       });
   },

@@ -20,13 +20,13 @@ const store = window.localStorage;
  * @typedef Affect
  * @type {Object}
  * @property {Number} [affectId]
- * @property {Number} activityId
+ * @property {Number} aspectId
  * @property {Number} factorId
  * @property {String} influenceName
  * @property {String} source
  * @property {String} [description]
  * @property {Factor} [factor]
- * @property {Activity} [activity]
+ * @property {Aspect} [aspect]
  * @property {Influence} [influence]
  */
 
@@ -39,11 +39,19 @@ const store = window.localStorage;
  */
 
 /**
- * @typedef Activity
+ * @typedef AspectType
  * @type {Object}
- * @property {Number} [activityId]
+ * @property {String} typeName
+ * @property {String} typeDisplay
+ */
+
+/**
+ * @typedef aspectId
+ * @type {Object}
+ * @property {Number} [aspectId]
  * @property {String} name
  * @property {String} description
+ * @property {AspectType} aspectType
  */
 
 /**
@@ -66,19 +74,19 @@ const store = window.localStorage;
  * @typedef Task
  * @type {Object}
  * @property {Number} [taskId]
- * @property {Number} activityId
+ * @property {Number} aspectId
  * @property {String} subject
  * @property {String} at
  * @property {String} atFormatted
  * @property {Number} duration
- * @property {Activity} [activity]
+ * @property {Aspect} [aspect]
  * @property {boolean} done
  */
 
 /**
  * Does error management.
  * @param {Promise} promise
- * @returns {Promise<void|Activity|Task|Influence|Factor|Affect|Activity[]|Task[]|Influence[]|Factor[]|Affect[]>}
+ * @returns {Promise<void|Aspect|AspectType|Task|Influence|Factor|Affect|Aspect[]|AspectType[]|Task[]|Influence[]|Factor[]|Affect[]>}
  */
 function handleRequest(promise) {
   return new Promise((resolve, reject) => {
@@ -155,18 +163,18 @@ class Api {
   }
 
   /**
-   * @returns {Promise<Activity[]>}
+   * @returns {Promise<Aspect[]>}
    */
-  getActivities() {
-    return handleRequest(this.axios.get(`${API_URL}/activities`));
+  getAspects() {
+    return handleRequest(this.axios.get(`${API_URL}/aspects`));
   }
 
   /**
-   * @param {Number} activityId
-   * @returns {Promise<Activity[]>}
+   * @param {Number} aspectId
+   * @returns {Promise<Aspect[]>}
    */
-  getActivityAffectedBy({activityId} = {}) {
-    return handleRequest(this.axios.get(`${API_URL}/activities/affect/${activityId}`));
+  getAspectAffectedBy({aspectId: aspectId} = {}) {
+    return handleRequest(this.axios.get(`${API_URL}/aspects/affect/${aspectId}`));
   }
 
   /**
@@ -196,6 +204,15 @@ class Api {
   /**
    * @param page
    * @param size
+   * @returns {Promise<AspectType[]>}
+   */
+  getAspectTypes() {
+    return handleRequest(this.axios.get(`${API_URL}/aspects/types`));
+  }
+
+  /**
+   * @param page
+   * @param size
    * @returns {Promise<Affect[]>}
    */
   getAffects({page = 0, size = 100} = {}) {
@@ -206,8 +223,8 @@ class Api {
    * @param {Number} id
    * @returns {Promise<void>}
    */
-  deleteActivity(id) {
-    return handleRequest(this.axios.delete(`${API_URL}/activities/${id}`));
+  deleteAspect(id) {
+    return handleRequest(this.axios.delete(`${API_URL}/aspects/${id}`));
   }
 
   /**
@@ -243,11 +260,11 @@ class Api {
   }
 
   /**
-   * @param {Activity} task
-   * @returns {Promise<AxiosResponse<Activity>>}
+   * @param {Aspect} aspect
+   * @returns {Promise<AxiosResponse<Aspect>>}
    */
-  addActivity(activity) {
-    return handleRequest(this.axios.post(`${API_URL}/activities`, activity));
+  addAspect(aspect) {
+    return handleRequest(this.axios.post(`${API_URL}/aspects`, aspect));
   }
 
   /**
@@ -266,7 +283,7 @@ class Api {
   /**
    * @param {number} taskId
    * @param {boolean} done
-   * @returns {Promise<void|AxiosResponse<Activity|Task|Influence|Factor|Affect|*[]>>}
+   * @returns {Promise<void|AxiosResponse<Aspect|Task|Influence|Factor|Affect|*[]>>}
    */
   doneTask(task) {
     return handleRequest(this.axios.post(`${API_URL}/clients/done`, task));

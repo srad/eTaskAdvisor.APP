@@ -19,7 +19,7 @@
                         #{{index+1}} {{task.subject}}
                       </template>
                       <template v-slot:content>
-                        <span class="text-primary">{{task.activity.name}}</span>,
+                        <span class="text-primary">{{task.aspectName}}</span>,
                         <span>{{task.atFormatted}}</span>,
                         <span class="text-warning">{{task.duration}}min</span>
                       </template>
@@ -62,7 +62,7 @@
                 <span style="text-decoration: line-through">#{{index+1}} {{task.subject}}</span>
               </template>
               <template v-slot:content>
-                <span class="text-primary">{{task.activity.name}}</span>,
+                <span class="text-primary">{{task.aspectName}}</span>,
                 <span>{{task.atFormatted}}</span>,
                 <span class="text-warning">{{task.duration}}min</span>
               </template>
@@ -80,11 +80,11 @@
     <b-modal id="addTask" title="Add Learning Task" hide-footer header-class="bg-primary text-dark" header-border-variant="primary" footer-border-variant="primary" class="border-primary border" body-bg-variant="dark">
       <b-card-text>
         <b-form ref="form" @submit="submit" @reset="reset">
-          <b-form-group label="Learning Activity (required)">
+          <b-form-group label="Activity (required)">
             <b-form-select
                 type="text"
-                v-model="form.activityId"
-                :options="activityOptions"
+                v-model="form.aspectId"
+                :options="aspectOptions"
                 required/>
           </b-form-group>
 
@@ -125,7 +125,7 @@
       </b-card-text>
     </b-modal>
 
-    <b-modal id="factorInfo" :title="'Factors for: ' + selectedActivity.name" footer-border-variant="dark" body-text-variant="light" body-bg-variant="dark" header-border-variant="primary" header-class="text-dark" footer-bg-variant="dark" ok-only
+    <b-modal id="factorInfo" :title="'Factors for: ' + selectedTask.aspectName" footer-border-variant="dark" body-text-variant="light" body-bg-variant="dark" header-border-variant="primary" header-class="text-dark" footer-bg-variant="dark" ok-only
              header-bg-variant="primary">
       <div>
         <table class="w-100 table table-sm m-0 table-borderless">
@@ -159,23 +159,23 @@ export default {
   data() {
     return {
       form: {
-        activityId: "",
+        aspectId: "",
         subject: "",
         at: "",
         duration: 0,
       },
-      // In accordance to the activity a the selected task
+      // In accordance to the aspect a the selected task
       affects: [],
-      selectedActivity: {name: ""},
-      activities: [],
+      selectedTask: {name: ""},
+      aspects: [],
       tasks: [],
       loading: true,
       loadedDone: false,
     };
   },
   computed: {
-    activityOptions() {
-      return [{value: "", text: "[none]"}].concat(this.activities.map(activity => ({value: activity.activityId, text: activity.name})));
+    aspectOptions() {
+      return [{value: "", text: "[none]"}].concat(this.aspects.map(aspect => ({value: aspect.aspectId, text: aspect.name})));
     },
     completedTasks() {
       return this.tasks.filter(task => task.done);
@@ -186,8 +186,9 @@ export default {
   },
   methods: {
     factors(task) {
-      this.selectedActivity = task.activity;
-      this.$api.getActivityAffectedBy({activityId: task.activityId})
+      this.$log(task);
+      this.selectedTask = task;
+      this.$api.getAspectAffectedBy({aspectId: task.aspectId})
         .then(affects => {
           while (this.affects.length > 0) {
             this.affects.pop();
@@ -216,6 +217,7 @@ export default {
       return false;
     },
     destroy(task) {
+      window.console.log(task);
       if (window.confirm("Delete?")) {
         this.$api.deleteTask({taskId: task.taskId})
           .then(() => this.tasks.splice(this.tasks.indexOf(task), 1))
@@ -235,17 +237,17 @@ export default {
     },
   },
   mounted() {
-    Promise.all([this.$api.getTasks({done: false}), this.$api.getActivities()])
+    Promise.all([this.$api.getTasks({done: false}), this.$api.getAspects()])
       .then(res => {
         res[0].forEach(task => this.tasks.push(task));
-        res[1].forEach(activity => this.activities.push(activity));
+        res[1].forEach(aspect => this.aspects.push(aspect));
         this.loading = false;
 
         setTimeout(() => {
-          const activityId = this.$route.params.activityId;
-          if (activityId) {
+          const aspectId = this.$route.params.aspectId;
+          if (aspectId) {
             this.addTask();
-            this.form.activityId = activityId;
+            this.form.aspectId = aspectId;
             this.$router.replace("/tasks");
           }
         }, 100);

@@ -4,13 +4,6 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <% if (VUE_APP_GOOGLE_VERIFY !== "") { %>
-  <meta name="google-site-verification" content="<%= VUE_APP_GOOGLE_VERIFY %>">
-  <% } %>
-  <% if (VUE_APP_GOOGLE_CLIENT_ID !== "") { %>
-  <meta name="google-signin-client_id" content="<%= VUE_APP_GOOGLE_CLIENT_ID %>">
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <% } %>
   <link rel="icon" href="<%= BASE_URL %>favicon.ico">
   <link rel="apple-touch-icon" sizes="152x152" href="<%= BASE_URL %>apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="<%= BASE_URL %>favicon-32x32.png">

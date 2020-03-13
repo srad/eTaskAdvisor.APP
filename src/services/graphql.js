@@ -86,7 +86,7 @@ class Api {
   /**
    * @returns {Promise<AxiosResponse<T>>}
    */
-  getActivities() {
+  getAspects() {
     return this._query("activities { _id name description }");
   }
 

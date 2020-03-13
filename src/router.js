@@ -7,14 +7,12 @@ import Knowledge from "./views/Knowledge.vue";
 import About from "./views/About.vue";
 import Guide from "./views/Guide";
 import Iframe from "./components/Iframe.vue";
-import SignIn from "./views/SignIn";
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {path: "/", name: "Home", component: Home, meta: {title: "Home", header: false, poster: true}},
-    {path: "/sign-in", name: "SignIn", component: SignIn, meta: {title: "Sign In", header: true, poster: true}},
     {path: "/tasks/:activityId?", name: "Tasks", component: Tasks, meta: {title: "Learning Tasks", poster: false}},
     {path: "/guide", name: "Guide", component: Guide, meta: {title: "Guide", header: false, poster: true}},
     {path: "/knowledge", name: "Knowledge", component: Knowledge, meta: {title: "Knowledge", poster: false}},
