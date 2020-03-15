@@ -10,7 +10,7 @@
         <h6 class="float-left m-0 p-1">
           <slot name="header"></slot>
         </h6>
-        <b-button variant="dark" class="float-right text-primary pl-3 pr-3" style="padding: 0.1rem" @click="$emit('destroy', obj)">
+        <b-button v-if="!instanceHideDelete" variant="dark" class="float-right text-primary pl-3 pr-3" style="padding: 0.1rem" @click="$emit('destroy', obj)">
           <font-awesome-icon icon="trash-alt"/>
         </b-button>
       </template>
@@ -34,12 +34,14 @@ export default {
   props: {
     obj: Object,
     footerClass: String,
+    hideDelete: Boolean,
   },
   name: "InfoCard",
   data() {
     return {
       myObj: this.obj,
       instanceFooterClass: this.footerClass || "",
+      instanceHideDelete: this.hideDelete || false,
     };
   },
 };
