@@ -16,17 +16,23 @@
                   <b-col>
                     <info-card v-bind:key="task.taskId" v-for="(task, index) in openTasks" class="grey-all" footer-class="justify-content-end" :obj="task" v-on:destroy="destroy(task)">
                       <template v-slot:header>
-                        #{{index+1}} {{task.subject}}
+                        #{{index+1}}/{{openTasks.length}} {{task.subject}}
                       </template>
                       <template v-slot:content>
-                        <span class="text-primary">{{task.aspectName}}</span>,
-                        <span>{{task.atFormatted}}</span>,
-                        <span class="text-warning">{{task.duration}}min</span>
+                        <dl class="m-0 p-0">
+                          <dt>Task</dt>
+                          <dd><span class="text-primary">{{task.aspect.name}}</span></dd>
+                          <dt>Due</dt>
+                          <dd><span>{{task.atFormatted}}</span></dd>
+                          <dt>Duration</dt>
+                          <dd><span class="text-warning">{{task.duration}}min</span></dd>
+                        </dl>
                       </template>
                       <template v-slot:footer>
                         <div class="float-right">
                           <b-button class="shadow-sm mr-1" size="sm" variant="info" @click="factors(task)">Factors</b-button>
                           <b-button class="shadow-sm" size="sm" variant="success" @click="done(task)">
+                            Done
                             <font-awesome-icon icon="check"/>
                           </b-button>
                         </div>
@@ -62,7 +68,7 @@
                 <span style="text-decoration: line-through">#{{index+1}} {{task.subject}}</span>
               </template>
               <template v-slot:content>
-                <span class="text-primary">{{task.aspectName}}</span>,
+                <span class="text-primary">{{task.aspect.name}}</span>,
                 <span>{{task.atFormatted}}</span>,
                 <span class="text-warning">{{task.duration}}min</span>
               </template>
@@ -125,17 +131,31 @@
       </b-card-text>
     </b-modal>
 
-    <b-modal id="factorInfo" :title="'Factors for: ' + selectedTask.aspectName" footer-border-variant="dark" body-text-variant="light" body-bg-variant="dark" header-border-variant="primary" header-class="text-dark" footer-bg-variant="dark" ok-only
+    <b-modal id="factorInfo" :title="'Factors affecting ' + selectedTask.aspect.name" footer-border-variant="dark" body-text-variant="light" body-bg-variant="dark" header-border-variant="primary" header-class="text-dark" footer-bg-variant="dark"
+             ok-only
              header-bg-variant="primary">
       <div>
         <table class="w-100 table table-sm m-0 table-borderless">
           <tbody>
           <tr v-for="affect in affects" :key="affect.affectId">
             <td class="border-primary p-0">
-              <h6 class="text-primary">{{affect.factor.name}}</h6>
-              <h6 class="text-light">{{affect.factor.description}}</h6>
-              <div class="text-primary">Influence: <span class="text-warning">{{affect.influence.influenceDisplay}}</span></div>
-              <hr/>
+              <info-card :hide-delete="true">
+                <template slot="header">
+                  {{affect.factor.name}}
+                </template>
+                <template slot="content">
+                  <dl>
+                    <dt class="text-primary">Details</dt>
+                    <dd>
+                      {{affect.factor.description}}
+                    </dd>
+                    <dt>Influence</dt>
+                    <dd class="text-primary">
+                      <span class="badge badge-warning p-2">{{affect.influence.name}}</span>
+                    </dd>
+                  </dl>
+                </template>
+              </info-card>
             </td>
           </tr>
           </tbody>
@@ -166,7 +186,7 @@ export default {
       },
       // In accordance to the aspect a the selected task
       affects: [],
-      selectedTask: {name: ""},
+      selectedTask: {aspect: {name: ""}},
       aspects: [],
       tasks: [],
       loading: true,
@@ -186,9 +206,8 @@ export default {
   },
   methods: {
     factors(task) {
-      this.$log(task);
       this.selectedTask = task;
-      this.$api.getAspectAffectedBy({aspectId: task.aspectId})
+      this.$api.aspects.getAspectAffectedBy({aspectId: task.aspectId})
         .then(affects => {
           while (this.affects.length > 0) {
             this.affects.pop();
@@ -198,7 +217,7 @@ export default {
         });
     },
     done(task) {
-      this.$api.doneTask({taskId: task.taskId, done: !task.done})
+      this.$api.clients.tasks.done({taskId: task.taskId, done: !task.done})
         .then(() => task.done = !task.done)
         .catch(() => alert("Error!"));
     },
@@ -208,7 +227,8 @@ export default {
     },
     submit(event) {
       event.preventDefault();
-      this.$api.addTask(this.form)
+      this.form.duration = parseInt(this.form.duration);
+      this.$api.clients.tasks.save(this.form)
         .then(task => {
           this.$bvModal.hide("addTask");
           this.tasks.unshift(task);
@@ -219,7 +239,7 @@ export default {
     destroy(task) {
       window.console.log(task);
       if (window.confirm("Delete?")) {
-        this.$api.deleteTask({taskId: task.taskId})
+        this.$api.clients.tasks.destroy(task.taskId)
           .then(() => this.tasks.splice(this.tasks.indexOf(task), 1))
           .catch(error => alert(error.message));
       }
@@ -231,13 +251,13 @@ export default {
     queryDone() {
       if (!this.loadedDone) {
         this.loadedDone = true;
-        this.$api.getTasks({done: true})
+        this.$api.clients.tasks.toListCompleted()
           .then(tasks => tasks.forEach(task => this.tasks.push(task)));
       }
     },
   },
   mounted() {
-    Promise.all([this.$api.getTasks({done: false}), this.$api.getAspects()])
+    Promise.all([this.$api.clients.tasks.toListOpen(), this.$api.aspects.toList()])
       .then(res => {
         res[0].forEach(task => this.tasks.push(task));
         res[1].forEach(aspect => this.aspects.push(aspect));

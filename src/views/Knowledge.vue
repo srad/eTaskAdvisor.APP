@@ -5,26 +5,26 @@
         <b-tab title="Aspects" active no-body @click="view('aspect')">
           <table class="d-none d-md-table table table-dark shadow-sm table-hover table-bordered">
             <thead class="thead-primary">
-              <th width="25%">Name</th>
-              <!--<th width="10%">Type</th>-->
-              <th>Description</th>
-              <th width="10%">Delete</th>
+            <th width="25%">Name</th>
+            <th width="10%">Type</th>
+            <th>Description</th>
+            <th width="10%">Delete</th>
             </thead>
             <tbody>
-              <tr :key="aspect.aspectId" v-for="aspect in aspects">
-                <td>{{aspect.name}}</td>
-                <!--<td>{{aspect.aspectType.typeDisplay}}</td>-->
-                <td>{{aspect.description}}</td>
-                <td>
-                  <b-button variant="danger" class="p-0" size="sm" block @click="destroy(aspect)">Delete</b-button>
-                </td>
-              </tr>
+            <tr :key="aspect.aspectId" v-for="aspect in aspects">
+              <td>{{aspect.name}}</td>
+              <td>{{aspect.aspectType.name}}
+              <td>{{aspect.description}}</td>
+              <td>
+                <b-button variant="danger" class="p-0" size="sm" block @click="destroy(aspect)">Delete</b-button>
+              </td>
+            </tr>
             </tbody>
           </table>
 
           <info-card class="d-md-none mt-2" v-bind:key="aspect.aspectId" v-for="aspect in aspects" :obj="aspect" v-on:destroy="destroy(aspect)">
             <template v-slot:header>
-              {{aspect.name}} <!--({{aspect.aspectType.typeDisplay}})-->
+              {{aspect.name}} <span class="ml-2 badge badge-warning border-dark border shadow-sm">{{aspect.aspectType.name}}</span>
             </template>
             <template v-slot:content>
               {{aspect.description}}
@@ -35,18 +35,18 @@
         <b-tab title="Factors" no-body class=" border-0" @click="view('factor')">
           <table class="d-none d-md-table table table-dark shadow-sm table-hover table-bordered">
             <thead class="thead-dark">
-              <th width="25%">Name</th>
-              <th>Description</th>
-              <th width="10%">Delete</th>
+            <th width="25%">Name</th>
+            <th>Description</th>
+            <th width="10%">Delete</th>
             </thead>
             <tbody>
-              <tr :key="factor.factorId" v-for="factor in factors">
-                <td>{{factor.name}}</td>
-                <td>{{factor.description}}</td>
-                <td>
-                  <b-button variant="danger" size="sm" block @click="destroy(factor)">Delete</b-button>
-                </td>
-              </tr>
+            <tr :key="factor.factorId" v-for="factor in factors">
+              <td>{{factor.name}}</td>
+              <td>{{factor.description}}</td>
+              <td>
+                <b-button variant="danger" size="sm" block @click="destroy(factor)">Delete</b-button>
+              </td>
+            </tr>
             </tbody>
           </table>
           <info-card class="d-md-none mt-2" v-bind:key="factor._id" v-for="factor in factors" :obj="factor" v-on:destroy="destroy(factor)">
@@ -58,6 +58,7 @@
             </template>
           </info-card>
         </b-tab>
+
         <b-tab title="Affects" no-body @click="view('affect')">
           <b-form class="w-100 p-2 mb-2 d-none d-md-table">
             <label class="mr-sm-2 text-bold text-primary">Filter</label>
@@ -70,47 +71,47 @@
 
           <table class="d-none d-md-table text-sm table-hover table-dark table table-bordered">
             <thead class="thead-dark">
-              <th width="40%">Aspect</th>
-              <th width="30%">Is Affected By</th>
-              <th width="20%">Influence</th>
-              <th width="10%">Delete</th>
+            <th width="40%">Aspect</th>
+            <th width="30%">Is Affected By</th>
+            <th width="20%">Influence</th>
+            <th width="10%">Delete</th>
             </thead>
             <tbody v-if="filteredAffects.length === 0">
-              <tr>
-                <td colspan="4">Nothing found</td>
-              </tr>
+            <tr>
+              <td colspan="4">Nothing found</td>
+            </tr>
             </tbody>
-            <tbody v-else v-for="affect in filteredAffects" :key="affect.affectId" style="border-top: 2px double #9BC53D;">
-              <tr>
-                <td>
+            <tbody v-else v-for="affect in filteredAffects" :key="affect.affectId" style="border-top: 2px double #9bc53d;">
+            <tr>
+              <td>
                 <span>
                   {{affect.aspect.name}}
                 </span>
-                </td>
-                <td>
+              </td>
+              <td>
                 <span>
                 {{affect.factor.name}}
                 </span>
-                </td>
-                <td>
-                <span class="p-1" v-bind:class="{'badge-success': affect.influenceName==='positive', 'badge-danger': affect.influenceName==='negative', 'badge-warning': affect.influenceName==='indifferent'}">
-                {{affect.influence.influenceDisplay}}
+              </td>
+              <td>
+                <span class="p-1" v-bind:class="{'badge-success': affect.influence.name==='Positive', 'badge-danger': affect.influence.name==='Negative', 'badge-warning': affect.influence.name==='Indifferent'}">
+                {{affect.influence.name}}
                 </span>
-                </td>
-                <td>
-                  <b-button variant="danger" class="p-0" size="sm" block @click="destroy(affect)">Delete</b-button>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="4">
-                  {{affect.description}}
-                </td>
-              </tr>
-              <tr>
-                <td colspan="4">
-                  <a href="affect.source" target="_blank">{{affect.source}}</a>
-                </td>
-              </tr>
+              </td>
+              <td>
+                <b-button variant="danger" class="p-0" size="sm" block @click="destroy(affect)">Delete</b-button>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4">
+                {{affect.description}}
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4">
+                <a href="affect.source" target="_blank">{{affect.source}}</a>
+              </td>
+            </tr>
             </tbody>
           </table>
 
@@ -122,11 +123,39 @@
               <span class="text-warning m-1">{{affect.aspect.name}}</span>
               <span class="m-1">is affected by</span>
               <span class="text-warning m-1">{{affect.factor.name}}</span>:
-              <span class="badge m-1" v-bind:class="{'badge-success': affect.influenceName==='positive', 'badge-danger': affect.influenceName==='negative', 'badge-warning': affect.influenceName==='indifferent'}">{{affect.influence.influenceDisplay}}</span>
+              <span class="badge m-1"
+                    v-bind:class="{'badge-success': affect.influence.name==='Positive', 'badge-danger': affect.influence.name==='Negative', 'badge-warning': affect.influence.name==='Indifferent'}">{{affect.influence.name}}</span>
               <hr class="m-0 mb-2 mt-2"/>
               {{affect.description}}
               <hr class="m-0 mb-2 mt-2"/>
               Source: <a class="text-info" :href="affect.source">{{affect.source}}</a>
+            </template>
+          </info-card>
+        </b-tab>
+
+        <b-tab title="Types" no-body @click="view('aspectType')">
+          <table class="d-none d-md-table table table-dark shadow-sm table-hover table-bordered">
+            <thead class="thead-dark">
+            <th width="25%">Name</th>
+            <th>Description</th>
+            <th width="10%">Delete</th>
+            </thead>
+            <tbody>
+            <tr :key="aspectType.aspectTypeId" v-for="aspectType in aspectTypes">
+              <td>{{aspectType.name}}</td>
+              <td>{{aspectType.description}}</td>
+              <td>
+                <b-button variant="danger" size="sm" block @click="destroy(factor)">Delete</b-button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <info-card class="d-md-none mt-2" v-bind:key="aspectType.aspectTypeId" v-for="aspectType in aspectTypes" :obj="aspectType" v-on:destroy="destroy(aspectType)">
+            <template v-slot:header>
+              {{aspectType.name}}
+            </template>
+            <template v-slot:content>
+              {{aspectType.description}}
             </template>
           </info-card>
         </b-tab>
@@ -144,7 +173,7 @@
               </b-form-group>
 
               <b-form-group label="Type of effect:">
-                <b-form-select v-model="form.aspect.typeName" size="sm" :options="aspectTypeOptions"></b-form-select>
+                <b-form-select v-model="form.aspect.aspectTypeId" size="sm" :options="aspectTypeOptions"></b-form-select>
               </b-form-group>
 
               <b-form-group label="Description:">
@@ -152,6 +181,28 @@
                     v-model="form.aspect.description"
                     required
                 ></b-form-textarea>
+              </b-form-group>
+            </template>
+
+            <template v-if="type==='aspectType'">
+              <b-form-group label="Name:">
+                <b-form-input
+                    v-model="form.aspectType.name"
+                    type="text"
+                    required
+                ></b-form-input>
+              </b-form-group>
+
+              <b-form-group label="Value(internal use):">
+              <b-form-input
+                    v-model="form.aspectType.value"
+                    type="text"
+                    required
+                ></b-form-input>
+              </b-form-group>
+
+              <b-form-group label="Description:">
+                <b-form-textarea v-model="form.aspectType.description" required/>
               </b-form-group>
             </template>
 
@@ -188,7 +239,7 @@
 
               <b-form-group label="Influence">
                 <b-form-select
-                    v-model="form.affect.influenceName"
+                    v-model="form.affect.influenceId"
                     :options="influenceOptions"
                     required
                 ></b-form-select>
@@ -248,8 +299,6 @@ export default {
       type: "aspect",
       display: "aspect",
 
-      types: [{value: "aspect", text: "Aspect"}, {value: "factor", text: "Factor"}, {value: "affect", text: "Affects"}],
-
       aspects: [],
       aspectTypes: [],
       affects: [],
@@ -260,7 +309,7 @@ export default {
       form: {
         aspect: {
           aspectId: "",
-          typeName: "",
+          aspectTypeId: "",
           name: "",
           description: "",
         },
@@ -269,11 +318,16 @@ export default {
           name: "",
           description: "",
         },
+        aspectType: {
+          aspectTypeId: "",
+          name: "",
+          description: "",
+        },
         affect: {
           affectId: "",
           aspectId: "",
           factorId: "",
-          influenceName: "",
+          influenceId: "",
           source: "",
           description: "",
         },
@@ -285,16 +339,16 @@ export default {
   computed: {
     // Provide only activities here
     aspectOptions() {
-      return [{value: "", text: "[none]"}].concat(this.cache.aspects.filter(a => a.typeName === "activity").map(aspect => ({value: aspect.aspectId, text: aspect.name})));
+      return [{value: "", text: "[none]"}].concat(this.cache.aspects.map(aspect => ({value: aspect.aspectId, text: `${aspect.name} (${aspect.aspectType.name})`})));
     },
     factorOptions() {
       return [{value: "", text: "[none]"}].concat(this.cache.factors.map(factor => ({value: factor.factorId, text: factor.name})));
     },
     influenceOptions() {
-      return [{value: "", text: "[none]"}].concat(this.cache.influences.map(influence => ({value: influence.influenceName, text: influence.influenceDisplay})));
+      return [{value: "", text: "[none]"}].concat(this.cache.influences.map(influence => ({value: influence.influenceId, text: influence.name})));
     },
     aspectTypeOptions() {
-      return [{value: "", text: "[none]"}].concat(this.cache.aspectTypes.map(influence => ({value: influence.typeName, text: influence.typeDisplay})));
+      return [{value: "", text: "[none]"}].concat(this.cache.aspectTypes.map(type => ({value: type.aspectTypeId, text: type.name})));
     },
     filteredAffects() {
       let result = this.cache.affects;
@@ -306,7 +360,7 @@ export default {
         result = result.filter(affect => affect.factorId === this.filterFactor);
       }
       if (this.filterInfluence !== "") {
-        result = result.filter(affect => affect.influenceName === this.filterInfluence);
+        result = result.filter(affect => affect.influenceId === this.filterInfluence);
       }
 
       return result;
@@ -343,21 +397,27 @@ export default {
     },
     destroy(option) {
       if (window.confirm("Delete?")) {
-        switch (this.display) {
+        switch(this.display) {
         case "aspect":
-          this.$api.deleteAspect(option.aspectId)
+          this.$api.aspects.destroy(option.aspectId)
             .then(() => {
               this.aspects.splice(this.aspects.indexOf(option), 1);
             });
           break;
         case "factor":
-          this.$api.deleteFactor(option.factorId)
+          this.$api.factors.destroy(option.factorId)
             .then(() => {
               this.factors.splice(this.factors.indexOf(option), 1);
             });
           break;
+        case "aspectType":
+          this.$api.aspectTypes.destroy(option.aspectTypeId)
+            .then(() => {
+              this.aspectTypes.splice(this.aspectTypes.indexOf(option), 1);
+            });
+          break;
         case "affect":
-          this.$api.deleteAffect(option.affectId)
+          this.$api.affects.destroy(option.affectId)
             .then(() => {
               this.affects.splice(this.affects.indexOf(option), 1);
             });
@@ -377,19 +437,25 @@ export default {
 
       const data = this.getForm();
 
-      switch (this.type) {
+      switch(this.type) {
       case "aspect":
-        data.aspectId = 0;
-        this.$api.addAspect(data)
+        this.$api.aspects.save(data)
           .then(res => {
             this.aspects.unshift(res);
             this.cache.aspects.unshift(res);
             done();
           });
         break;
+      case "aspectType":
+        this.$api.aspectTypes.save(data)
+          .then(res => {
+            this.aspectTypes.unshift(res);
+            this.cache.aspectTypes.unshift(res);
+            done();
+          });
+        break;
       case "factor":
-        data.factorId = 0;
-        this.$api.addFactor(data)
+        this.$api.factors.save(data)
           .then(res => {
             this.factors.unshift(res);
             this.cache.factors.unshift(res);
@@ -397,8 +463,7 @@ export default {
           });
         break;
       case "affect":
-        data.affectId = 0;
-        this.$api.addAffect(data)
+        this.$api.affects.save(data)
           .then(res => {
             this.affects.unshift(res);
             this.cache.affects.unshift(res);
@@ -429,11 +494,11 @@ export default {
   },
   created() {
     Promise.all([
-      this.$api.getAspects(),
-      this.$api.getFactors(),
-      this.$api.getAffects(),
-      this.$api.getInfluences(),
-      this.$api.getAspectTypes(),
+      this.$api.aspects.toList(),
+      this.$api.factors.toList(),
+      this.$api.affects.toList(),
+      this.$api.influences.toList(),
+      this.$api.aspectTypes.toList(),
     ])
       .then(res => {
         const aspects = res[0];

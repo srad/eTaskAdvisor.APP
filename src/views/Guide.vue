@@ -10,22 +10,26 @@
 
       <b-card v-if="showSelection" :title="info.name" class="text-left text-dark shadow-sm mb-3" body-bg-variant="primary" border-variant="dark">
         <b-card-text>
-          <h6><span class="font-weight-bolder">Details:</span> {{activity.description}}</h6>
-          <router-link class="btn btn-dark float-right shadow-sm" :to="{ name: 'Tasks', params: { activityId: activity.activityId }}">
+          <h6><span class="font-weight-bolder">Details:</span> {{aspect.description}}</h6>
+          <router-link class="btn btn-dark float-right shadow-sm" :to="{ name: 'Tasks', params: { aspectId: aspect.aspectId }}">
             Add as Task
           </router-link>
         </b-card-text>
       </b-card>
 
-      <b-card v-if="showSelection" title="Factors Affecting Activity" body-bg-variant="primary" border-variant="dark" class="text-left text-dark shadow-sm">
+      <b-card v-if="showSelection" title="This activity is affected by" body-bg-variant="primary" border-variant="dark" class="text-left text-dark shadow-sm">
         <b-card-text>
+          <hr class="border-dark"/>
           <table class="w-100 table table-sm m-0 table-borderless">
             <tbody>
-              <tr v-for="affect in affects" :key="affect.affectId">
-                <td class="p-0 pb-1">
-                  <b-button class="text-left" block size="sm" variant="dark" @click="select(affect.factor)">{{affect.factor.name}}</b-button>
-                </td>
-              </tr>
+            <tr v-if="affects.length===0">
+              <td>No results found</td>
+            </tr>
+            <tr v-else v-for="affect in affects" :key="affect.affectId">
+              <td class="p-0 pb-1">
+                <b-button block class="float-right" variant="dark" @click="select(affect.factor)">{{affect.factor.name}}</b-button>
+              </td>
+            </tr>
             </tbody>
           </table>
         </b-card-text>
@@ -47,7 +51,7 @@ export default {
     return {
       selectedFactor: {name: "", description: ""},
       selectedActivity: "",
-      activity: "",
+      aspect: "",
       info: "",
       affects: [],
       aspects: [],
@@ -58,22 +62,22 @@ export default {
   },
   watch: {
     selectedActivity(aspectId) {
-      this.$api.getAspectAffectedBy({aspectId: aspectId})
+      this.$api.aspects.getAspectAffectedBy({aspectId: aspectId})
         .then(res => this.affects = res);
       const a = this.aspects.filter(a => a.aspectId === aspectId)[0];
-      this.activity = a;
+      this.aspect = a;
       this.showSelection = true;
     },
   },
   computed: {
     optionsActivities() {
       return this.aspects
-        .filter(a => a.typeName === "activity")
+        .filter(a => a.aspectType.value === "activity")
         .map(a => ({value: a.aspectId, text: a.name}));
     },
     optionsLearning() {
       return this.aspects
-        .filter(a => a.typeName === "learning")
+        .filter(a => a.aspectType.value === "learning")
         .map(a => ({value: a.aspectId, text: a.name}));
     },
   },
@@ -84,10 +88,8 @@ export default {
     },
   },
   created() {
-    this.$api.getAspects()
-      .then(res => res.forEach(a => {
-        this.aspects.push(a);
-      }));
+    this.$api.aspects.toList()
+      .then(res => res.forEach(a =>  this.aspects.push(a)));
   },
 };
 </script>

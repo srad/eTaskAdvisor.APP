@@ -13,7 +13,7 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {path: "/", name: "Home", component: Home, meta: {title: "Home", header: false, poster: true}},
-    {path: "/tasks/:activityId?", name: "Tasks", component: Tasks, meta: {title: "Learning Tasks", poster: false}},
+    {path: "/tasks/:aspectId?", name: "Tasks", component: Tasks, meta: {title: "Learning Tasks", poster: false}},
     {path: "/guide", name: "Guide", component: Guide, meta: {title: "Guide", header: false, poster: true}},
     {path: "/knowledge", name: "Knowledge", component: Knowledge, meta: {title: "Knowledge", poster: false}},
     {path: "/imprint", name: "Imprint", component: Iframe, props: {url: process.env.VUE_APP_URL_IMPRINT}, meta: {title: "Imprint", poster: false}},

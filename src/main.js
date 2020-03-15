@@ -7,7 +7,7 @@ import {library} from "@fortawesome/fontawesome-svg-core";
 import {faHandsHelping, faUserSecret, faTasks, faStar, faTrashAlt, faCheck, faQuestion} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
-import {Api} from "./services/webapi";
+import {createInstance} from "./services/webapi";
 
 Vue.use(BootstrapVue);
 
@@ -21,12 +21,9 @@ Vue.prototype.$log = function (...args) {
   window.console.log(...args);
 };
 
-const api = new Api();
-Vue.prototype.$api = api;
-
-// Only launch APP if connected to server.
-api.authenticate()
-  .then(() => {
+createInstance()
+  .then(apiInstances => {
+    Vue.prototype.$api = apiInstances;
     window.console.info("Authenticated");
     new Vue({
       router,
