@@ -2,7 +2,7 @@
 
 [![Build Status](http://sedrad.com:8080/buildStatus/icon?job=eTaskAdvisor.App)](http://sedrad.com:8080/job/eTaskAdvisor.App/)
 
-This project is implemented in Vue.js and can consume any RESTFul endpoint.## 
+This project is implemented in Vue.js 2.x and JavaScript and can consume any RESTFul endpoint.
 
 ## Screenshots
 
