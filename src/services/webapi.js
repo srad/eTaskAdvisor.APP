@@ -270,6 +270,10 @@ class Factor extends ApiInstance {
   }
 }
 
+class FactorType extends ApiInstance {
+  constructor(axios) {super(axios, "factors/types");}
+}
+
 class Influence extends ApiInstance {
   constructor(axios) {super(axios, "influences");}
 }
@@ -284,14 +288,18 @@ class Affect extends ApiInstance {
 
 let authInstance = null;
 const apiInstances = {
-  client: undefined,
-  influence: undefined,
-  affect: undefined,
-  aspect: undefined,
-  aspectType: undefined,
-  factor: undefined,
+  clients: undefined,
+  influences: undefined,
+  affects: undefined,
+  aspects: undefined,
+  aspectTypes: undefined,
+  factors: undefined,
+  factorTypes: undefined,
 };
 
+/**
+ * @returns {Promise<{}>}
+ */
 function createInstance() {
   return new Promise((resolve, reject) => {
     if (authInstance === null) {
@@ -304,6 +312,7 @@ function createInstance() {
           apiInstances.aspectTypes = new AspectType(authInstance.axios);
           apiInstances.clients = new Client(authInstance.axios);
           apiInstances.factors = new Factor(authInstance.axios);
+          apiInstances.factorTypes = new FactorType(authInstance.axios);
           resolve(apiInstances);
         })
         .catch(reject);

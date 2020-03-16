@@ -10,8 +10,9 @@
         <h6 class="float-left m-0 p-1">
           <slot name="header"></slot>
         </h6>
-        <b-button v-if="!instanceHideDelete" variant="dark" class="float-right text-primary pl-3 pr-3" style="padding: 0.1rem" @click="$emit('destroy', obj)">
-          <font-awesome-icon icon="trash-alt"/>
+        <b-button v-if="!instanceHideDelete" variant="danger" class="float-right shadow-sm text-sm pl-3 pr-3" style="padding: 0.1rem" @click="$emit('destroy', obj)">
+          Delete
+          <!--<font-awesome-icon icon="trash-alt"/>-->
         </b-button>
       </template>
 
