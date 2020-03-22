@@ -2,6 +2,12 @@
 
 [![Build Status](http://sedrad.com:8080/buildStatus/icon?job=eTaskAdvisor.App)](http://sedrad.com:8080/job/eTaskAdvisor.App/)
 
+This project is part of a `Learning Technologies` university course.
+
+The goal was to research the literature of `cognitive psychology` and `learning` about the effects of environmental factors on learning tasks and to develop a framework to capture and categorize the effects to feed the knowledge into a system and provide an API to access the knowledge for recommendations. 
+
+For this purpose this project provides a web frontend. The data is provided by a Web API implemented by [eTaskAdvisor.WebApi](https://github.com/srad/eTaskAdvisor.WebApi)
+
 This project is implemented in Vue.js 2.x and JavaScript and can consume any RESTFul endpoint.
 
 ## Screenshots
