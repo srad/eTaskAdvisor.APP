@@ -1,6 +1,6 @@
 # eTaskAdvisor.App
 
-[![Build Status](http://sedrad.com:8080/buildStatus/icon?job=eTaskAdvisor.App)](http://sedrad.com:8080/job/eTaskAdvisor.App/)
+[![Build Status](https://jenkins.sedrad.com/buildStatus/icon?job=eTaskAdvisor.App)](https://jenkins.sedrad.com/job/eTaskAdvisor.App/)
 
 This project is part of a `Learning Technologies` university course.
 
